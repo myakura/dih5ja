@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<meta charset=utf-8>
+<title>How Did We Get Here? - Dive Into HTML5 (日本語訳)</title>
+<!--[if lt IE 9]><script src=j/html5.js></script><![endif]-->
+<!--link rel="shortcut icon" href=favicon.ico-->
+<!--link rel=alternate type=application/atom+xml href=http://hg.diveintohtml5.org/hgweb.cgi/atom-log-->
+<link rel=stylesheet href=screen.css>
+<style>
+body{counter-reset:h1 1}
+</style>
+<link rel=stylesheet media='only screen and (max-device-width: 480px)' href=mobile.css>
+<style>
+body {
+  line-height: 1.9;
+}
+</style>
+<!--link rel=prefetch href=index.html-->
+<!--p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#history>Dive Into <abbr>HTML5</abbr></a> <span class=u>&#8227;</span>-->
+<h1><br>How Did We Get Here?</h1>
+<p id=toc>&nbsp;
+<p class=a>&#x2767;
+<h2 id=divingin>Diving In</h2>
+
+<p class=f style=clear:both>私は最近、ある Mozilla の開発者が <a href=http://lists.w3.org/Archives/Public/public-html/2010Jan/0107.html>標準の策定における葛藤</a> についてこう述べているのを目にした。
+
+<blockquote data-orig-cite=http://lists.w3.org/Archives/Public/public-html/2010Jan/0107.html>
+
+<p>実装と仕様は、繊細なステップを踏みながら踊り続けないといけないんだ。仕様が安定する前に実装が始まって欲しくないというあなたの気持ちは分かる。そんな未完成の実装に人々が依存しはじめて、それがあとあと仕様そのものにも影響することを怖れているのだろう。でも、仕様が実装や制作者が試す前に固まってしまうのも考え物だろう。それは、仕様にはフィードバックが必要だからだ。両者の間には常に葛藤があって、僕らはその間でなんとかやっていくしかないんだ。
+</blockquote>
+
+<p>この言葉を心にとどめておいてほしい。では、なぜ我々が <abbr>HTML5</abbr> に至ったのかを話そうじゃないか。
+
+<p class=c><img src=i/openclipart.org_johnny_automatic_animals_on_see_saw.png width=526 height=116 alt="シーソーの上の動物">
+
+<p class=a>&#x2767;
+
+<h2 id=mime-types>MIME types</h2>
+
+<p>この本は <abbr>HTML5</abbr> についての本で、前のバージョンの <abbr>HTML</abbr> や <abbr>XHTML</abbr> についてのものではない。ただ、<abbr>HTML5</abbr> の歴史や背景、その目的を理解するにはいくつかの技術的な概念を知っておく必要がある。特に必要なのが、<abbr>MIME</abbr> タイプと呼ばれるものだ。
+
+<p>Web ブラウザがページをリクエストすると、サーバは実際のページを渡す前に「ヘッダ」というものを送信する。ヘッダは通常見えないが、Web 開発ツールの多くはそれらを表示する事ができるので気になるなら確かめてみればよい。さて、目には見えないが、ヘッダは重要だ。なぜなら、ヘッダには、後に続くマークアップをどう解釈すればよいかをブラウザに伝える働きがあるからだ。中でも <code>Content-Type</code> というヘッダは何よりも重要だ。
+
+<blockquote><pre>Content-Type: text/html</pre></blockquote>
+
+<p>この &#8220;<code>text/html</code>&#8221; がページの &#8220;content type&#8221; もしくは「<abbr>MIME</abbr> タイプ」と呼ばれるものだ。このヘッダは、リソースが実際に何なのかを記す<strong>唯一の</strong>もので、つまりこのヘッダによってリソースがどう描画されるかが決定される。たとえば、画像には画像の <abbr>MIME</abbr> タイプがある (<abbr>JPEG</abbr> には <code>image/jpeg</code> が、<abbr>PNG</abbr> には <code>image/png</code> がある)。また、JavaScript には JavaScript の <abbr>MIME</abbr> タイプがある。<abbr>CSS</abbr> スタイルシートにも専用の <abbr>MIME</abbr> タイプがある。すべてのものに <abbr>MIME</abbr> タイプがある。Web は <abbr>MIME</abbr> タイプの上に成り立っているのだ。
+
+<p>もちろん、現実というのはもう少し厄介なものだ。最初期 (1993 年頃) の Web サーバは <code>Content-Type</code> ヘッダを送信していなかった。その時はまだ、このヘッダそのものが存在していなかったのだ。 (<code>Content-Type</code> の登場は 1994 年のことになる。) そういった 1993 年のサーバとの互換性のため、いくつかの大きな Web ブラウザは特定の条件下で <code>Content-Type</code> を無視するようにした。(これは &#8220;content sniffing&#8221; と呼ばれる。) しかし、一般的なルールとして、Web にあるすべてのもの ― <abbr>HTML</abbr> ページ、画像、スクリプト、ビデオ、PDF など <abbr>URL</abbr> を持つものすべてが、それぞれの <abbr>MIME</abbr> タイプを <code>Content-Type</code> ヘッダから送信している。
+
+<p>このことも頭の片隅にとどめておこう。あとでまた、<abbr>MIME</abbr> について触れることになる。
+
+<p class=a>&#x2767;
+
+<h2 id=history-of-the-img-element>A long digression into how standards are made</h2>
+
+<p class=ss><img src=i/openclipart.org_johnny_automatic_monkey_reading.png width=365 height=396 alt="本を読むサル">
+
+<p>「どうして <code>&lt;img></code> 要素なんてものがあるんだい?」なんて質問を聞くことはそうないだろう。もちろん、<code>&lt;img></code> 要素があるのは<em>誰か</em>が生み出したからに他ならない。何もないところから、突然わいて出てきたわけではないのだ。すべての要素、すべての属性、あなたが使ったことのある <abbr>HTML</abbr> の機能のすべては、誰かが生み出し、どのように機能するかを決め、書き出したものだ。彼らは神ではないし、完璧でもない。ただの人だ。もちろん賢くはあるが、ただの人なのだ。
+
+<p>オープンな策定が行われている標準の素晴らしいところは、先ほどのような質問に過去をあたって答えられるところにある。議論はメーリングリストで行われ、それらはたいていアーカイブされており検索が可能だ。というわけで、少しばかりメールを発掘して「なぜ <code>&lt;img></code> 要素があるのか」という質問に答えてみよう。それには、<abbr>W3C</abbr> (World Wide Web Consortium) という団体が設立されるよりもさらに前までさかのぼる必要がある。どれくらい前かというと、それは Web が始まった頃、つまり Web サーバを両手で数えられるくらいまで前になる。足の指もすこし必要かもしれないが。
+
+<p><i>(引用したメールの中には誤字や脱字、表記揺れがあるが、正確性のためそれらはそのままにしている。)</i>
+
+<p>1993 年 2 月 25 日に投稿された <a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0182.html"><cite>Marc Andreessen</cite> のメッセージ</a> には、こんなことが書かれている。
+
+<blockquote data-orig-cite="http://1997.webhistory.org/www.lists/www-talk.1993q1/0182.html">
+<p>新しい HTML タグを提案したいんだ。
+<p>名前: IMG
+<p>必須属性: <code>SRC="url"</code>
+<p>このタグはビットマップやピクセルマップファイルがあることをブラウザに伝える。ブラウザはネットワークからファイルを取得し、それを画像として解釈し、タグがあった場所に埋め込む。
+<p>こんな感じに書ける。
+<p><code>&lt;IMG SRC="file://foobar.com/foo/bar/blargh.xbm"></code>
+<p>(終了タグはなくて、スタンドアローンなタグだ。)
+<p>このタグはアンカーの中にも埋め込める。アンカーの中に入れると、それはテキストのアンカーと同じように実行できるアイコンとして機能する。
+<p>どの画像フォーマットをサポートするかはブラウザの自由だ。たとえば、Xbm や Xpm がいいフォーマットじゃないかな。ブラウザがそのフォーマットをサポートしていないときは、やりたいようにすればいいと思う (ちなみに、X Mosaic はデフォルトのビットマップをプレースホルダとしてポップアップするようになっている)。
+<p>このタグは X Mosaic に必要なんだ。すでに動くものを作っているし、少なくとも X Mosaic 内部で使うつもりだ。でも、このタグがどう HTML でどう処理されるか、意見を聞かせてほしい。もしこれよりいいアイデアがあったら、ぜひ教えてほしい。画像フォーマットは難しいところだけど、「ブラウザがやりたいようにすればいい」っていう以外に、うまい言い方を思いつかないんだ。それに、完璧な解決法が見つかるかもしれないし、待ってみようと思う (MIME? そうかもね)。
+</blockquote>
+
+<p>この <a href="http://en.wikipedia.org/wiki/X_BitMap">Xbm</a> と <a href="" data-orig-href="http://en.wikipedia.org/wiki/X_PixMap">Xpm</a> というのは、Unix システムで広く使われていた画像フォーマットだ。
+
+<p>&#8220;Mosaic&#8221; はもっとも古い Web ブラウザのひとつだ (&#8220;X Mosaic&#8221; というのは、Unix システム上で動くバージョンのことだ)。このメッセージが書かれた 1993 年初め、まだ <a href="http://ja.wikipedia.org/wiki/マーク・アンドリーセン" data-orig-href="http://en.wikipedia.org/wiki/Marc_Andreessen">Marc Andreessen</a> は <a href="http://ja.wikipedia.org/wiki/ネットスケープコミュニケーションズ" data-orig-href="http://en.wikipedia.org/wiki/Mosaic_Communications_Corporation">Mosaic Communications Corporation</a> の設立も、そしてその主力製品である &#8220;Mosaic Netscape&#8221; の開発も始めていなかった (これらの名前にピンとこない人は、後々の名前 &#8220;Netscape Corporation&#8221; と &#8220;Netscape Navigator&#8221; といえばおわかりだろうか)。
+
+<p>「MIME? そうかもね」というのは <a href="http://en.wikipedia.org/wiki/Content_negotiation">content negotiation</a> を指している。これは HTTP の機能で、クライアント (ブラウザなど) がサーバ (Web サーバなど) にどのようなリソースをサポートしているか (<code>image/jpeg</code> など) を伝えることで、サーバがクライアントに適切なフォーマットを返せるという仕組みだ。<a href="http://www.w3.org/Protocols/HTTP/AsImplemented.html">1991 年に定義された最初の HTTP</a> (1993 年 2 月時点で実装されていた唯一のバージョンになる) では、クライアントがサーバにどの画像形式をサポートしているかを伝える手段がなかった。このため、Marc はこのジレンマに直面していたのだ。
+
+<p>数時間後、<a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0183.html"><cite>Tony Johnson</cite> のメッセージ</a> が返ってきた。
+
+<blockquote data-orig-cite="http://1997.webhistory.org/www.lists/www-talk.1993q1/0183.html">
+<p>僕もこれに似たものを Midas 2.0 (ここ SLAC で使われていて、あと数週でリリースされる) に搭載している。ただ、名前は全部違っていて、<code>NAME="name"</code> という引数も持っている。書き方はきみの <code>IMG</code> とほぼ同じで、こう書く。
+<p><code>&lt;ICON name="NoEntry" href="http://note/foo/bar/NoEntry.xbm"></code>
+<p><code>name</code> パラメータの意図は、ブラウザが「ビルトイン」の画像を持てるようにすることだ。指定した値が「ビルトイン」画像にマッチすると、画像の代わりにそっちを読み出す。<code>name</code> は &#8220;line mode&#8221; ブラウザに対して、画像の代わりに読み出すシンボルのヒントにもなる。
+<p>僕はタグやパラメータの名前にそこまでこだわらないけど、同じ名前を使った方がいいと思う。<code>IMAGE=</code> とか <code>SOURCE=</code> ではなく略語を使うことにもこだわらない。でも、何となく <code>IMAGE</code> は小さめの画像を表しているように聞こえるから、<code>ICON</code> の方がよいかな。でも、<code>ICON</code> だと極端かな?
+</blockquote>
+
+<p><a href="http://en.wikipedia.org/wiki/MidasWWW">Midas</a> はもう一つのもっとも古いブラウザで、X Mosaic の競合だ。Midas はクロスプラットフォームで、Unix と VMS 上で動いた。&#8220;SLAC&#8221; というのは、<a href="http://ja.wikipedia.org/wiki/SLAC国立加速器研究所" data-orig-href="http://en.wikipedia.org/wiki/Stanford_Linear_Accelerator">Stanford Linear Accelerator Center (スタンフォード線形加速器センター)</a> のことで、現在は SLAC National Accelerator Laboratory (SLAC 国立加速器研究所) と呼ばれている。SLAC はアメリカ合衆国最初の Web サーバ をホストしていた機関だった (このサーバは <a href="http://www.slac.stanford.edu/history/earlyweb/history.shtml">ヨーロッパの外に置かれた初めてのサーバでもあった</a>)。<a href="http://www.slac.stanford.edu/history/earlyweb/wizards.shtml#Tony%20Johnson">Tony</a> がこのメッセージを投稿していたこのときすでに、SLAC は 自身の Web サーバ上に <a href="http://www.slac.stanford.edu/history/earlyweb/firstpages.shtml">5 つのページ</a> をなんと 441 日間もホストしていたという、相当な古参だったんだ。
+
+<p>Tony はこう続ける。
+
+<blockquote>
+<p>新しいタグのことについて話してるから、僕が Midas 2.0 でサポートを考えている別のタグの話をさせてくれ。そのタグは今のと似ていて、こんな感じで書く。
+<p><code>&lt;INCLUDE HREF="..."></code>
+<p>このタグの目的は、タグで指定した別の文書がタグがある部分に読み込まれるというものだ。指定した文書はなんでもいいけど、主な目的は画像 (任意の大きさ) を文書内に埋め込むことだ。もちろん HTTP2 が来たら、呼び出された文書のフォーマットは別のネゴシエーションを経ることになるだろうね。
+</blockquote>
+
+<p>&#8220;HTTP2&#8221; というのは <a href="http://www.w3.org/Protocols/HTTP/HTTP2.html">Basic HTTP as defined in 1992</a> を指す。1993 年初頭でも、この規格はほとんどが実装されていなかった。&#8220;HTTP2&#8221; として呼ばれたこの草案はその後 &#8220;HTTP 1.0&#8221; として標準化されている (とはいえ、<a href="http://www.w3.org/Protocols/HTTP/1.0/spec.html">さらに 3 年後の出来事</a> にはなるが)。HTTP 1.0 は <a href="http://www.w3.org/Protocols/HTTP/HTRQ_Headers.html#z3">content negotiation のためのリクエストヘッダ</a> を定義していた。さっき言った「MIME? そうかもね」だ。
+
+<p>Tony はさらにこう言っている。
+
+<blockquote>
+<p>ただ、こっちの方ががいいかなとも考えている。
+<p><code>&lt;A HREF="..." INCLUDE>See photo&lt;/A></code>
+<p>あまり <code>&lt;A></code> タグに別の機能をこれ以上追加したくないというのはある。ただ、こう書ければ <code>INCLUDE</code> パラメータを理解しないブラウザと互換性を保つことができる利点がある。こうすると <code>INCLUDE</code> を理解するブラウザでは、アンカーテキスト (この場合は &#8220;See photo&#8221;) が指定した文書 (画像など) で置き換えられ、古かったりしょうのないブラウザでは <code>INCLUDE</code> が完全に無視されることになる。
+</blockquote>
+
+<p>この提案が実装されることはなかったが、画像がない場合にテキストを提供するという考えは <a href="http://diveintoaccessibility.org/day_23_providing_text_equivalents_for_images.html">アクセシビリティにおいて重要なテクニック</a> になる。そしてこの仕組みは、Marc の提案した <code>&lt;IMG></code> では考えられていなかった。数年後、この機能は <a href="http://www.w3.org/TR/html4/struct/objects.html#h-13.8"><code>&lt;img alt></code></a> として組み込まれ、すぐに Netscape によって <a href="http://www.cs.tut.fi/~jkorpela/html/alt.html#tooltip">ツールチップで表示するという間違った実装</a> が行われてしまった。
+
+<p>Tony のメッセージの数時間後に、<a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0186.html"><cite>Tim Berners-Lee</cite> のメッセージ</a> がやってきた。
+
+<blockquote data-orig-cite="http://1997.webhistory.org/www.lists/www-talk.1993q1/0186.html">
+<p>図表は次のように表現できないだろうかと考えたことがある。
+<p><code>&lt;a name=fig1 href="fghjkdfghj" REL="EMBED, PRESENT">Figure &lt;/a></code>
+<p>キーワードの意味はこうだ。
+<pre>EMBED	 埋め込んで表示する
+PRESENT	 もとの文書が表示された時に表示する</pre>
+<p>キーワードには様々な組み合わせが考えられる。そして、ブラウザがキーワードを知らなくても、この仕組みは破綻しない。
+<p>この仕組みをアイコンを選択する方法として利用すると、アンカーが入れ子になるのは分かっている。うーむ。ただ、特別なタグは欲しくはなかったんだ。
+</blockquote>
+
+<p>この提案も実装されることはなかったが、<code>rel</code> 属性は <a href="http://diveintohtml5.org/semantics.html#link">今も存在している</a>。
+
+<p>この提案に <a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0188.html"><cite>Jim Davis</cite> が次のように付け加えている</a>。
+
+<blockquote data-orig-cite="http://1997.webhistory.org/www.lists/www-talk.1993q1/0188.html">
+<p>Content type を指定出来る方法があるといいんじゃないかな。たとえば、こんなのはどうだろう。
+<p><code>&lt;IMG HREF="http://nsa.gov/pub/sounds/gorby.au" CONTENT-TYPE=audio/basic></code>
+<p>ただ、僕は content type はファイルの拡張子で指定するっていう仕組みでも全く問題ないよ。
+</blockquote>
+
+<p>この提案が実装されることもなかった。が、後に Netscape はメディアオブジェクトを埋め込む仕組みを <code>&lt;embed></code> 要素として導入している。
+
+<p>一方、<a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0192.html"><cite>Jay C. Weber</cite> が次のように尋ねている</a>。
+
+<blockquote data-orig-cite="http://1997.webhistory.org/www.lists/www-talk.1993q1/0192.html">
+<p>WWW ブラウザが対応して欲しいメディアのトップに画像はある。けれど、メディアごとに固有のフックを追加すべきではないと思う。MIME タイプによる仕組みの啓蒙はどうなるんだ?
+</blockquote>
+
+<p><a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0194.html"><cite>Marc Andreessen</cite> はこう答える</a>。
+
+<blockquote data-orig-cite="http://1997.webhistory.org/www.lists/www-talk.1993q1/0194.html">
+<p>これは MIME の代わりに使われる標準ドキュメントメカニズムというわけじゃないよ。MIME とは別に必要なシンプルな機能を提供するだけだ。
+</blockquote>
+
+<p><a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0198.html"><cite>Jay C. Weber</cite> がこう返す</a>。
+
+<blockquote data-orig-cite="http://1997.webhistory.org/www.lists/www-talk.1993q1/0198.html">
+<p>MIME が問題を分かりにくくしてるようだから、いったん忘れよう。僕が反対しているのは、「様々なメディアオブジェクトの埋め込みをどうサポートするか」という方向ではなく、「どうやって埋め込み画像をサポートするか」に進んでいる議論の方向なんだ。
+<p>だってそうだろう。もしかしたら誰かが来週、音声のために「<code>&lt;AUD SRC="file://foobar.com/foo/bar/blargh.snd"></code> っていうタグを追加しよう」なんて言うかもしれないじゃないか。
+<p>何かの一般化に、大きなコストをかけるべきではないよ。
+</blockquote>
+
+<p>今となって思えば、この Jay の懸念は鋭かった。翌週ということにはならなかったが、HTML5 ではついに <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/video.html#video"><code>&lt;video></code></a> と <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/video.html#audio"><code>&lt;audio></code></a> が追加される。
+
+<p>さて、Jay の最初のメッセージに返答するかたちで <a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0204.html"><cite>Dave Raggett</cite> が次のメッセージを寄せている</a>。
+
+<blockquote data-orig cite="http://1997.webhistory.org/www.lists/www-talk.1993q1/0204.html">
+<p>その通り! フォーマットのやりとりに関しては多くの画像/ラインアート形式を考えるようにしたい。Tim が書いた画像中のクリッカブルエリアについても重要なトピックだ。
+</blockquote>
+
+<p>1993 年の後半、<a href="http://www.w3.org/People/Raggett/">Dave Raggett</a> は <a href="http://www.w3.org/MarkUp/HTMLPlus/htmlplus_1.html">HTML+</a> を HTML 標準の進化形として提案した。この提案は実装されることはなく、また <a href="http://www.w3.org/MarkUp/html-spec/html-spec_toc.html">HTML 2.0</a> に上書きされた。HTML 2.0 は &#8220;retro-spec&#8221;, つまり広く使われていた機能を規格にしたものだった。仕様書には「<a href="http://www.w3.org/MarkUp/html-spec/html-spec_1.html#SEC1.1">この仕様は様々な機能をまとめ、詳細を明確にし、規格化したもの</a> で、機能は 1994 年 6 月以前に広く使われていた HTML のものだ」とある。
+
+<p>Dave はその後、HTML+ をもとに <a href="http://www.w3.org/MarkUp/html3/CoverPage.html">HTML 3.0</a> を書いた。しかし W3C のリファレンス実装である <a href="http://www.w3.org/Arena/">Arena</a> を除き HTML 3.0 もまた実装されることがなく、また &#8220;retro-spec&#8221; である <a href="http://www.w3.org/MarkUp/Wilbur/">HTML 3.2</a> に上書きされてしまった。HTML 3.2 仕様書には「<a href="http://www.w3.org/TR/REC-html32.html#intro">HTML 3.2 は広く使われている機能を追加している</a>。たとえばテーブル、アプレット、画像に回り込むテキストがそうだ。また、HTML 2.0 など既存の標準とも後方互換性を保っている」と書かれていた。
+
+<p>Dave はさらにその後 <a href="http://www.w3.org/TR/html4">HTML 4.0</a> を共同で執筆し、<a href="http://tidy.sourceforge.net/">HTML Tidy</a> を開発した。HTML 4.0 以降は XHTML, XForms, MathML, その他のモダンな W3C 関連仕様に貢献している。
+
+<p>話を 1993 年に戻そう。<a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0209.html">Marc は Dave にこう返している</a>。
+
+<blockquote data-orig-cite="http://1997.webhistory.org/www.lists/www-talk.1993q1/0209.html">
+<p>僕らは任意のハイパーリンクをアイコンや画像、テキストなどに埋め込める、汎用的な手続き型グラフィック言語について考えるべきかもしれない。誰か Intermedia がこういう事をできるか知ってる人はいない?
+</blockquote>
+
+<p><a href="http://en.wikipedia.org/wiki/Intermedia_(hypertext)">Intermedia</a> は Brown University のハイパーテキストプロジェクトだった。Intermedia は 1985 から 1991 年にかけて開発され、<a href="http://ja.wikipedia.org/wiki/A/UX" data-orig-href="http://en.wikipedia.org/wiki/A/UX">A/UX</a> という初期の Macintosh の Unix ライクな OS で動作していた。
+
+<p>この「汎用的な手続き型グラフィック言語」はその後広がりをみせることになる。モダンブラウザが <a href="http://www.w3.org/Graphics/SVG/">SVG</a> (埋め込みスクリプトつきの宣言的マークアップ言語) と <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#the-canvas-element"><code>&lt;canvas></code></a> (手続き型ダイレクトモードグラフィックス API) の両方をサポートしたのだ。とはいえ、後者については <a href="http://www.whatwg.org/">WHATWG</a> によって &#8220;retro-spec&#8221; になる以前から <a href="http://ln.hixie.ch/?start=1089635050&amp;count=1">独自拡張</a> として存在していたのだが。
+
+<p><a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0217.html"><cite>Bill Janssen</cite> はこう返答する</a>。
+
+<blockquote data-orig-cite="http://1997.webhistory.org/www.lists/www-talk.1993q1/0217.html">
+<p>他のシステムだけど Andrew と Slate がこの機能 (とても価値のある) を持っているよ。Andrew は _insets_ というものからできていて、それぞれの inset はテキストやビットマップ、ドローイング、アニメーション、メッセージ、スプレッドシートなんていった面白い型を持っている。任意の再帰埋め込みもあるから、埋め込みに対応したものにならどこにでも inset を埋め込める。たとえば、inset はテキストウィジェットのテキストや、ドローイングウィジェットにある矩形、スプレッドシートのセルとか、どこにでも埋め込める。
+</blockquote>
+
+<p>&#8220;Andrew&#8221; とは <a href="http://www-2.cs.cmu.edu/~AUIS/">Andrew User Interface System</a> を指す (しかしこの当時はただ <a href="http://en.wikipedia.org/wiki/Andrew_Project">Andrew Project</a> として知られていた)。
+
+<p>一方、<a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0215.html"><cite>Thomas Fine</cite> には違うアイデアがあった</a>。
+
+<blockquote data-orig-cite="http://1997.webhistory.org/www.lists/www-talk.1993q1/0215.html">
+<p>僕が思うに、WWW で画像を表示する最良の方法は MIME を使うことだ。postscript なら MIME で使えるサブタイプになっているし、テキストとグラフィックスの混在はお手の物だ。
+<p>クリッカブルじゃないって? 確かに。ただ、display postscript には何か解決法があるんじゃないかな。それが無かったとしても、postscript の標準に機能を追加することは必要ないかもしれない。URL を指定して、現在のパスをボタンのための領域として利用するアンカーコマンドを定義すればいい。postscript はパスととても愛称がいいから、任意のボタンシェイプは問題ないよ。
+</blockquote>
+
+<p><a href="http://ja.wikipedia.org/wiki/Display_PostScript" data-orig-href="http://en.wikipedia.org/wiki/Display_PostScript">Display Postscript</a> は Adobe と NeXT が開発したスクリーン上に描画する技術のことだ。
+
+<p>この提案が実装されることはなかった。しかし、HTML を直す一番良い方法は何かと完全に置き換えることだという考えは、<a href="http://dbaron.org/log/20090707-ex-html">今でもときどき現れる</a>。
+
+<p>さて、<a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0221.html">1993 年 3 月 2 日に <cite>Tim Berners-Lee</cite> がこんなメッセージを送った</a>。
+
+<blockquote data-orig-cite="http://1997.webhistory.org/www.lists/www-talk.1993q1/0221.html">
+<p>HTTP2 では登録された MIME 型だけではなく、ユーザが処理できるといったものであればどんな型であっても文書に埋め込めるようになる。そう、postscript とハイパーテキストという状態もあるだろう。ただ、display postscript が充分かどうかは分からない。Adobe が postscript ベースの &#8220;PDF&#8221; を実現しようとしているのを知っているが、それはリンクを持ち、彼らのプロプライエタリなビューアで表示できるようになるだろう。
+<p>アンカーのための汎用的なオーバーレイ言語 (Hytime ベースかな?) があれば、ハイパーテキストとグラフィックス/ビデオの標準がそれぞれ独立して進化できるようになる。その方がお互いのためにも良いだろう。
+<p><code>IMG</code> タグは <code>INCLUDE</code> に名前を変えて、任意の文書型を参照できるようにしよう。<code>INCLUDE</code> という名前が cpp の include のように、SGML ソースコードをインラインでパースするものとして受け取られるのであれば、<code>EMBED</code> もよいだろう。
+</blockquote>
+
+<p><a href="http://www.hytime.org/">HyTime</a> は 初期の SGML ベースなハイパーテキスト文書システムだった。そして、初期の HTML に関する議論や、その後の XML に関する議論でも大きな影響を与えたものだった。 
+
+<p>Tim の <code>&lt;INCLUDE></code> タグという提案も実装されることはなかった。しかし、その影響が <code>&lt;object></code>, <code>&lt;embed></code>, <code>&lt;iframe></code> 要素に反映されていることはおわかりだろう。
+
+<p>そして 1993 年 3 月 12 日、<a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0257.html">Marc Andreessen が舞い戻り、こんなメッセージを投稿した</a>。
+
+<blockquote data-orig-cite="http://1997.webhistory.org/www.lists/www-talk.1993q1/0257.html">
+<p>やあ。もうすぐ Mosaic v0.10 をリリースできるかなっていう段階なんだけど、そのバージョンではこないだ言ったとおりインラインの GIF と XBM 画像/ビットマップをサポートするよ。&#8230;
+<p>今のところ、<code>INCLUDE</code>/<code>EMBED</code> をサポートしようとは考えていない。&#8230; たぶん <code>&lt;IMG SRC="url"></code> のままいくことになる (すべてのインライン画像をアイコンと呼ぶのは無理があるから、<code>ICON</code> という名前でもない)。当分の間、インライン画像が明示的に content-type を持つことはないだろうから、そのうちサポートしようと思う (MIME の普及も待って、それもサポートするよ)。というか、僕らが使ってる画像の取得ルーチンは画像形式をオンザフライで判別するから、ファイル名にある拡張子もそこまで重要じゃないんだ。
+</blockquote>
+
+<p class=a>&#x2767;
+
+<h2 id=an-unbroken-line>An unbroken line</h2>
+
+<p>私はこの、公開されたほぼすべてのページで使われていると言っても過言ではない、ある <abbr>HTML</abbr> の要素の誕生につながった、もうそろそろ 17 年にもなるこの議論のひとつひとつに惹きつけられてやまない。考えてもみてくれ。
+
+<p class=ss><img src=i/openclipart.org_johnny_automatic_Corsican_Pine.png width=216 height=405 alt="松の木">
+
+<ul>
+<li>HTTP は引き続き存在している。HTTP は 0.9 から 1.0, そして 1.1 を経て今なお <a href="http://www.ietf.org/dyn/wg/charter/httpbis-charter.html">進化の最中にある</a>。
+<li>HTML も引き続き存在している。インライン画像さえサポートしていなかったあのデータフォーマットもまた、2.0, 3.2, 4.0 と続いているのだ。HTML は途切れることなく続いている線なのだ。もう少し細かく言えば、ねじれ、結び目がつき、そしてもつれた線だ。この進化の木には多くの「死んだ枝」がある。標準を意識しすぎた者が自分たちさえも追い抜き、製作者や実装者がついて行けなくなったのだ。しかし、<a href="http://www.w3.org/People/Berners-Lee/FAQ.html#Examples">1990 年の Web ページ</a> はいま 2010 年現在でもモダンブラウザで表示される。このページを私の最新鋭の Android 端末で表示させても「古いフォーマットをインポートしています」なんて言われる事もない。
+<li>HTML はいつも、ブラウザメーカーと製作者、標準おたく、そしてカッコについて語りたがる輩のおしゃべりの中にいた。その中で成功した HTML のほとんどは &#8220;retro-spec&#8221;, つまり世の中の動きに追従しながら、少しずつ良い方向へ押し出していくというやり方を取っていた。(ブラウザメーカーや製作者、またはどちらをも無視して) HTML は「純潔」であるべきだと言う人が居るかもしれないが、彼らは誤解している。HTML は純潔であったことはなく、整理しようと試みた結果はいつも見事な失敗で終わっている。何かで置き換えようとする試みについては、語るまでもないだろう。
+<li>1993 年のブラウザで、今もそれと分かる形で存在しているものはない。Netscape Navigator は <a href="http://en.wikipedia.org/wiki/History_of_Mozilla_Application_Suite#Open_sourcing_of_Communicator">1998 に放棄</a> され、<a href="http://en.wikipedia.org/wiki/History_of_Mozilla_Application_Suite#Rewriting_from_scratch">いちから書き直され</a> Mozilla Suite となったが、<a href="http://en.wikipedia.org/wiki/History_of_Mozilla_Firefox">Firefox 開発の折に fork された</a>。Internet Explorer はテーマやピンボールゲームとともに &#8220;Microsoft Plus! for Windows 95&#8221; に同梱されるかたちでささやかにその「はじまり」をむかえた。(はじまりと言ったものの、<a href="http://en.wikipedia.org/wiki/Spyglass_Mosaic">さらに遡ることももちろん可能だ</a>。)
+<li>1993 年に使われていた OS も存在しているが、今日の Web に関係するものではない。今日日ほとんどの人々は Windows 2000 以降を搭載した PC や、Mac OS X を搭載する Mac, Linux を搭載した PC, あるいは iPhone のようなモバイルデバイスを使って Web を「体験」している。1993 年、Windows はバージョン 3.1 で、OS/2 と競争していた。Mac は System 7 が動いていて、Linux は Usenet から配布されていたんだ。(面白い悪戯を教えてあげよう。年寄りの耳元で &#8220;Trumpet Winsock&#8221; とか &#8220;MacPPP&#8221; と囁くんだ。)
+<li>今では「Web 標準」と呼ばれるようになったものに当時から関わっていた<em>彼ら</em>のうち幾人かは今でも標準化に関わっている。20 年以上もだ。彼らの中には、さらに 1980 年代、いやそれより前から、HTML の前身に関わっていたものもいる。
+<li>HTML の前身と言えば、HTML と Web の隆盛の影で忘れてしまいがちな、しかし HTML のデザインに影響を与えた対抗フォーマットとシステムだ。Andrew や Intermedia, HyTime はどうなったのだろうか。HyTime は昔のアカデミックなリサーチプロジェクトではない。<a href="http://xml.coverpages.org/hytime.html">ISO 標準</a> なのだ。また、軍でも採用された。ビッグビジネスだったのだ。そんな輝かしい HyTime の歴史は、ブラウザからこの <a href="http://www.sgmlsource.com/history/hthist.htm">HTML で書かれたページ</a> にアクセスすれば読むことができる。
+</ul>
+
+<p>しかしこれらの事実は、「どうして <code>&lt;img></code> 要素が存在するのか」という疑問の答えにはなっていない。なぜ <code>&lt;icon></code> 要素ではなかったのか、<code>&lt;include></code> 要素ではなかったのか。もしくはハイパーリンクに <code>include</code> 属性をつける、あるいは <code>rel</code> 属性の値の組み合わせで表現する方法はどうして実現されなかったのか。いったい、なぜ <code>&lt;img></code> 要素なのだろうか。答えはとても簡単だ。Marc Andreessen が <code>&lt;img></code> 要素を実装して、それをリリースしたからだ。
+
+<p>しかし、<em>すべての</em>実装が勝つというわけではない。Andrew や Intermedia, HyTime にも実装があった。実装は必要だが、それだけでは成功しない。また、私は標準に先行した実装が最良の方法だと言いたいわけでは<em>ない</em>。Marc の <code>&lt;img></code> 要素は画像フォーマットを指定しなかった。テキストがどう回り込むかも定義しなかった。代替テキストや古いブラウザのフォールバックもサポートしていなかった。17 年たった今でも、<a href="http://tools.ietf.org/html/draft-abarth-mime-sniff">私たちは content sniffing に苦慮している</a>。それは <a href="http://code.google.com/p/doctype/wiki/ArticleContentSniffing">厄介なセキュリティ脆弱性の温床になってもいる</a>。そしてそれは、<a http="http://ja.wikipedia.org/wiki/ブラウザ戦争" data-orig-href="http://en.wikipedia.org/wiki/Browser_wars">ブラウザ戦争</a> よりも前、17 年前の 1993 年 2 月 25 日に Marc Andreessen が言った「MIME? そうかもね」という言葉と、それを反映した実装がリリースしたときまで遡るのだ。
+
+<p>実装されたものが勝つのだ。 
+
+<p class=a>&#x2767;
+
+<h2 id=timeline>A timeline of HTML development from 1997 to 2004</h2>
+
+<p>1997 年 12 月、World Wide Web Consortium (W3C) は <a href=http://www.w3.org/TR/REC-html40-971218/><abbr>HTML</abbr> 4.0</a> を公開し、<abbr>HTML</abbr> Working Group をクローズした。それから2ヶ月も経たないうちに、別の <abbr>W3C</abbr> Working Group が <a href=http://www.w3.org/TR/1998/REC-xml-19980210><abbr>XML</abbr> 1.0</a> を公開した。さらにそれから3ヶ月ほど経過したとき、W3C の運営者は &#8220;<a href=http://www.w3.org/MarkUp/future/>Shaping the Future of <abbr>HTML</abbr></a>&#8221, HTML の将来について考えるというワークショップを開催した。ここで、W3C は HTML を諦めたのかという疑問が出てくるだろう。彼らの答えはこうだ。
+
+<blockquote data-orig-cite=http://esw.w3.org/topic/HTML/history>
+<p>議論のなかで、<abbr>HTML</abbr> 4.0 をさらに拡張するのは難しいという見解が一致した。4.0 を <abbr>XML</abbr> アプリケーションに変換する必要があるからだ。このような制約を振り払う方法は、次世代の HTML を <abbr>XML</abbr> タグセットのもと新しく始めることにある。
+</blockquote>
+
+<p><abbr>W3C</abbr> はその「<abbr>XML</abbr> タグセット」をつくるため、<abbr>HTML</abbr> Working Group をふたたび設立した。彼らの最初の仕事は 1998 年 12 月に、新しく要素や属性を追加せず、<a href=http://www.w3.org/TR/1998/WD-html-in-xml-19981205/><abbr>HTML</abbr> を <abbr>XML</abbr> で再構成した</a> 暫定仕様の草案だった。これが後に &#8220;<a href=http://www.w3.org/TR/xhtml1/><abbr>XHTML</abbr> 1.0</a>&#8221; となる。この仕様は <abbr>XHTML</abbr> 文書のために新しく用意された <abbr>MIME</abbr> 型 <code>application/xhtml+xml</code> を定義していた。しかし、既存の <abbr>HTML</abbr> 4 ページからの移行を容易なものとするため、仕様には <a href=http://www.w3.org/TR/xhtml1/#guidelines>Appendix C</a> という付録も含まれていた。そこには XHTML 文書を既存の HTML UA で表示させたいという製作者のためのガイドラインが記されていた。Appendix C では、製作者が &#8220;<abbr>XHTML</abbr>&#8221; なページを作り、それを <code>text/html</code> <abbr>MIME</abbr> 型で提供してもよいしていたのだ。
+
+<p>彼らの次の仕事はフォームだった。1999 年 8 月、同グループは <a href=http://www.w3.org/TR/1999/WD-xhtml-forms-req-19990830><abbr>XHTML</abbr> Extended Forms</a> という仕様の草案を公開した。その <a href=http://www.w3.org/TR/1999/WD-xhtml-forms-req-19990830#intro>冒頭</a> に、グループの期待がこう記されている。
+
+<blockquote data-orig-cite=http://www.w3.org/TR/1999/WD-xhtml-forms-req-19990830#intro>
+<p>検討の結果、<abbr>HTML</abbr> Working Group は次世代フォーム仕様のゴールと、以前の <abbr>HTML</abbr> 用に作られたブラウザとの後方互換性を保つことが相容れないという結論に達した。私たちの目的はよく定義された要件のもと、新しくクリーンなフォームモデル (&#8220;<abbr>XHTML</abbr> Extended Forms&#8221;) を提供することにある。この文書で紹介する要件は、数多くのフォームアプリケーションにおける経験を基とする。
+</blockquote>
+
+<p>数ヶ月後に &#8220;<abbr>XHTML</abbr> Extended Forms&#8221; は &#8220;XForms&#8221; と名を変え、<a href=http://www.w3.org/MarkUp/Forms/2000/Charter.html>その策定を行う Working Group</a> が組織された。このグループは <abbr>HTML</abbr> Working Group と並行して作業を進め、そして 2003 年 10 月に <a href=http://www.w3.org/TR/2003/REC-xforms-20031014/>XForms 1.0 の first edition</a> が公開された。
+
+<p><abbr>XML</abbr> への移行が完了するなか、<abbr>HTML</abbr> Working Group は「次世代 <abbr>HTML</abbr>」の策定に目を向けていた。2001 年 5 月、彼らは <a href=http://www.w3.org/TR/2001/REC-xhtml11-20010531/><abbr>XHTML</abbr> 1.1 の first edition</a> を公開した。<abbr>XHTML</abbr> 1.1 は <abbr>XHTML</abbr> 1.0 に <a href=http://www.w3.org/TR/2001/REC-xhtml11-20010531/changes.html#a_changes>追加された機能はほんの少し</a> だったが、一方で &#8220;Appendix C&#8221; という抜け穴を封じてもいた。バージョン 1.1 以降の <abbr>XHTML</abbr> で書かれた文書は、<code>application/xhtml+xml</code> <abbr>MIME</abbr> 型で提供されることになった。
+
+<p class=a>&#x2767;
+
+<h2 id=xhtml>Everything you know about XHTML is wrong</h2>
+
+<p>さて、<abbr>MIME</abbr> 型はなぜ重要なのだろうか。先程からしつこくこれに触れている理由は、<a href=http://esw.w3.org/topic/HTML/DraconianErrorHandling>draconian error handling</a> にある。ブラウザは <abbr>HTML</abbr> にいつも寛容だ。たとえ <code>&lt;/head></code> タグのない <abbr>HTML</abbr> ページを作ったとしても、ふつうに表示してくれる。(いくつかのタグは <code>&lt;head></code> の終了と <code>&lt;body></code> の開始を示唆するのだ。) タグは段階をふまえネストする、つまり互い違いに閉じてはならないのだが、たとえば <code>&lt;b>&lt;i>&lt;/b>&lt;/i></code> と書いてしまったとしても、ブラウザはただ (どうやってか) 対処してしまうのだ。エラーメッセージが出ることもない。
+
+<p style="float:left;margin-right:1.75em"><img src=i/openclipart.org_johnny_automatic_3_birds.png width=187 height=362 alt="三羽の笑う鳥">
+
+<p>その「壊れた」 <abbr>HTML</abbr> が Web ブラウザで動作してしまうことで、製作者は多くの壊れた <abbr>HTML</abbr> ページを作り続けてしまうことは想像に難くないだろう。ある推定によると、Web 上の 99% もの <abbr>HTML</abbr> ページにひとつ以上のエラーがあるらしい。しかしそのようなエラーに対しブラウザがエラーメッセージを出すことはないので、誰もその間違いを直さない。
+
+<p>W3C はこれを Web の根本的な問題ととらえ、それに対処しようとした。1997 年に公開された <abbr>XML</abbr> はそのような寛容なクライアントという伝統を壊し、<abbr>XML</abbr> を消費するすべてのプログラムは「整形式」に関するエラーをfatalと扱わせた。最初のエラーでfailするという概念はギリシアの支配者である <a href="http://en.wikipedia.org/wiki/Draco_(lawgiver)">Draco</a> が法にほんの少しでも触れたものに対しても極刑を課したことに通じたことから、&#8220;draconian error handling&#8221; と呼ばれるようになった。W3C が <abbr>HTML</abbr> を <abbr>XML</abbr> ボキャブラリとして再構成した際、彼らはすべての文書が <code>application/xhtml+xml</code> <abbr>MIME</abbr> 型で処理されなければならないとした。これが draconian error handling だ。<abbr>XHTML</abbr> ページに整形式エラー、たとえば <code>&lt;/head></code> を忘れたり互い違いにタグを閉じてしまったものがひとつでもあると、ブラウザは処理をそこで中断しエラーメッセージをエンドユーザに表示しなければならないのだ。
+
+<p>この考え方が常に評価されるわけではなかった。99% のエラー率を持つ Web においてエラーをエンドユーザに表示することと、<abbr>XHTML</abbr> 1.0 や 1.1 の提供するわずかな新機能を天秤にかけたとき、製作者はただという選択をした。しかし、彼らは <abbr>XHTML</abbr> をも無視したわけではない。そんなことはするはずない。<abbr>XHTML</abbr> 1.0 仕様が製作者のために掘った「<abbr>XHTML</abbr> に似た構文を使って書いて、<code>text/html</code> <abbr>MIME</abbr> 型で提供する」Appendix C という抜け穴だ。これがとても多くの Web 開発者が行ったことだ。彼らは <abbr>XHTML</abbr> 構文に「アップグレード」したが、文書は <code>text/html</code> <abbr>MIME</abbr> で提供し続けたのだ。
+
+<p>今日でも、非常に多くの Web ページが自身を <abbr>XHTML</abbr> と主張している。<abbr>XHTML</abbr> の DOCTYPE を1行目で宣言し、小文字でタグを書く。属性は引用符で必ず括り、空要素の最後にはスラッシュをつけ <code>&lt;br /></code> や <code>&lt;hr /></code> などと書くのだ。しかし、ほんとうにごく僅かのページだけが <abbr>XML</abbr> の draconian error handling を発生させうる <code>application/xhtml+xml</code> <abbr>MIME</abbr> 型でページを配信するのだ。<code>text/html</code> <abbr>MIME</abbr> 型で配信されたページは、DOCTYPE, 構文、コーディングスタイルに関わらず、「寛容な」 <abbr>HTML</abbr> パーサで処理される。ページが壊れていたとしても、なおマークアップエラーを無視し、エンドユーザにそれを伝えることもない。
+
+<p><abbr>XHTML</abbr> 1.0 はこの抜け穴を提供していたが、<abbr>XHTML</abbr> 1.1 では塞がれた。そして完成することのなかった <abbr>XHTML</abbr> 2.0 もまた draconian error handling を課す伝統を引き継いだ。これが Web に何十億という <abbr>XHTML</abbr> 1.0 と宣言したページがある一方で、<abbr>XHTML</abbr> 1.1 (あるいは <abbr>XHTML</abbr> 2.0) と宣言されたページが数えるほどしかない理由だ。ではあなたはどうだろう。本当に <abbr>XHTML</abbr> を利用しているだろうか。<abbr>MIME</abbr> 型を確かめてみよう。(もしどの <abbr>MIME</abbr> 型を使っているか知らないなら、使っているのは <code>text/html</code> で間違いないと言えよう。) ページを <code>application/xhtml+xml</code> <abbr>MIME</abbr> 型で提供しない限り、あなたの &#8220;<abbr>XHTML</abbr>&#8221; は名前だけの <abbr>XML</abbr> でしかないのだ。
+
+<p class=a>&#x2767;
+
+<h2 id=webapps-cdf>A competing vision</h2>
+
+<p>2004 年 6 月、W3C は <a href=http://www.w3.org/2004/04/webapps-cdf-ws/>Workshop on Web Applications and Compound Documents</a> という Web アプリケーションと複合文書に関するワークショップを開催した。ワークショップには 3 つのブラウザベンダ、Web 開発会社、そして他の W3C 会員が参加していた。Mozilla Foundation, Opera Software の人物が Web の将来について異なるビジョンを提案した。<a href=http://www.w3.org/2004/04/webapps-cdf-ws/papers/opera.html><abbr>HTML</abbr> 4 を拡張し、Web アプリケーション開発のための新しい機能を提供する</a> というものだ。
+
+<blockquote data-orig-cite=http://www.w3.org/2004/04/webapps-cdf-ws/papers/opera.html>
+<p>私たちは以下の 7 つの原則を、この Web アプリケーション用 HTML の拡張作業において何よりも重要な要件だと考えている。
+<dl>
+<dt>後方互換性と明確な移行パス</dt>
+<dd><dd>Web アプリケーション技術は、HTML, CSS, DOM, JavaScript と、製作者に馴染みのあるものを基礎とするべきである。</dd>
+<dd>基礎的な Web アプリケーションの機能は、IE6 のビヘイビア、スクリプティング、スタイルシートで実装可能なものとすべきである。こうすることで、製作者に統合における明確な方針を提供できる。現在高いマーケットシェアを持つ UA において、バイナリプラグインなしに実現可能でない解決方法は、実現する可能性が低いと考えられる。</dd>
+<dt>詳細なエラー処理の定義</dt>
+<dd>Web アプリケーションのエラー処理は、UA それぞれが固有の処理機構を提供することや、他の UA の処理をリバースエンジニアリングにより解析する必要がないよう、詳細に定義されなければならない。<dd>
+<dt>オーサリングエラーがユーザーに示されるべきではない</dt>
+<dd>仕様は起こりうるエラーについて、そこから復旧する正確な挙動を記さなければならない。エラー処理はほとんどの場合において、XML のようにひどい扱いをするのではなく、CSS のように寛容であるべきだ。</dd>
+<dt>実践的なユースケース</dt>
+<dd>Web Applications 仕様に取り込まれる機能は、実践的なユースケースの有無で判断されなければならない。また、その反対は常に正ではない。すべてのユースケースが、新しい機能にによって実現される必要はない。</dd>
+<dd>ユースケースは製作者がこれまで実際の Web サイト開発において、ワークアラウンドで苦しく解決していた方法を基とするべきである。</dd>
+<dt>スクリプトはそのまま</dt>
+<dd>しかしながら、マークアップで解決できる便利な機能が用意される場合には避けるべきである。</dd>
+<dd>デバイス固有のやり方にない (XBL に含まれていない) 場合を除き、スクリプトはデバイス非依存・視覚表現に非依存であるべきだ。</dd>
+<dt>デバイス固有のプロファイルは避けるべきだ</dt>
+<dd>製作者の使う機能が、同じ UA のデスクトップ版とモバイル版で実装されていることを保証すべきだ。</dd>
+<dt>オープンな策定プロセス</dt>
+<dd>Web は開かれた環境で開発されたからこそ成功した。Web Applications 仕様は Web の中核となる仕様であり、オープンに開発されるべきだ。メーリングリスト、そのアーカイブ、仕様の草案は常に公開されるべきだ。</dd>
+</dl>
+</blockquote>
+
+<p>ワークショップ参加者は「W3C は成熟し洗練された OS レベル API の提供ではなく、宣言的な HTML と CSS の拡張と、命令的な DOM の拡張を行い、ミディアムレベルな Web アプリケーションの要件を解決すべきか」という、Opera Software (当時) の Ian Hickson による提案について投票を行った。賛成 8 に対し反対は 11 であった。ワークショップの <a href=http://www.w3.org/2004/04/webapps-cdf-ws/summary>サマリー</a> において W3C は「現時点で、W3C は 現在の W3C Working Group が策定する技術の範囲外で HTML と CSS を拡張するためのリソースをつぎ込む予定はない」と答えている。
+
+<p>この決定を受け、<abbr>HTML</abbr> および <abbr>HTML</abbr> フォームの発展を提案したものに残された道は 2 つしかなかった。あきらめるか、W3C の外で <abbr>HTML</abbr> を行うかだ。彼らは後者を選び、<a href=http://www.whatwg.org/><code>whatwg.org</code></a> というドメインを登録した。そして 2004 年 6 月、<a href=http://www.whatwg.org/news/start><abbr>WHAT</abbr> Working Group が誕生した</a> のだ。
+
+<p class=a>&#x2767;
+
+<h2 id=whatwg>WHAT Working Group?</h2>
+
+<p class=ss><img src=i/openclipart.org_johnny_automatic_big_sandwich.png width=182 height=523 alt="大きなサンドウィッチ">
+
+<p><abbr>WHAT</abbr> Working Group とは一体ぜんたい何なのだろうか。<a href=http://www.whatwg.org/news/start>彼らの説明</a> を聞こうじゃないか。
+
+<blockquote data-orig-cite=http://www.whatwg.org/news/start>
+<p>Web Hypertext Applications Technology Working Group は Web ブラウザメーカーと HTML の拡張に興味をもつ人間が集う、ゆるく非公式でオープンなフォーラムだ。グループの目的は相互運用可能な Web アプリケーションの普及を促進するよう、HTML と関連技術を基礎とした仕様の開発することだ。開発した仕様は標準化団体に提出することも考えている。提出した仕様は、標準化トラックにおいて HTML の拡張を公式に行う際の基礎として使われるだろう。
+
+<p>このフォーラムは、HTML や関連技術の仕様に関してかわされた、過去数ヶ月の間に個人的に交わされていたメールを発展させたものだ。これまでのトピックとして、既存の Web サイトとの後方互換性を損なわないかたちで HTML4 のフォームを拡張し、製作者が望んでいた機能をサポートすることがある。このグループが組織された理由は、それらの仕様の開発が今後オープンなメーリングリスト上で行われ、アーカイブも公開されるという、完全にオープンな状態で行われることを保証することにある。
+</blockquote>
+
+<p>ここで鍵となるのが「後方互換性を損なわない」というフレーズだ。(Appendix C という抜け穴を省いた) XHTML は HTML と後方互換ではなかった。XHTML は全く新しい MIME 型で提供される必要があり、またその MIME 型で提供されるコンテンツはすべて draconian error handling を必須としていた。XForms も HTML フォームと後方互換ではなかった。XForms は <abbr>XHTML</abbr> <abbr>MIME</abbr> 型で提供される文書内でしか使えなかったからだ。<abbr>XHTML</abbr> <abbr>MIME</abbr> 型を必要とすることはすなわち、draconian error handling が必須となる。すべては <abbr>MIME</abbr> に繋がるのだ。
+
+<p><abbr>WHAT</abbr> Working Group は、10 年にもわたる <abbr>HTML</abbr> への注力を放棄し既存の Web サイトの 99% を使えなくするのではなく、異なるアプローチをとった。ブラウザが実際に使用している「寛容な」エラー処理アルゴリズムを記すことにしたのだ。Web ブラウザは <abbr>HTML</abbr> のエラーに対し寛容だったが、それをどうやっているかを実際に記すなんてことをするお人好しはいなかった。NCSA Mosaic は壊れたページを扱う独自のアルゴリズムを持っていて、Netscape はそれに沿うようにがんばった。それに続いて、Intenet Explorer が Netscape に沿うようにした。今度は、Opera と Firefox が Internet Explorer に沿うようにがんばった。そして Safari が Firefox に沿うようになって、その他が続いてという流れが今日まで続いている。開発者は何千時間という時間を、彼らの競合製品と互換性を持つようにがんばっていたのだ。
+
+<p>なんてばかげた仕事だと聞こえるかもしれない。実際、その通りだ。いや、その通りだった。5 年かかったが <abbr>WHAT</abbr> Working Group はついに既存の Web サイトと互換性のあるかたちで (すこしのエッジケースはあれど) <a href=http://www.whatwg.org/specs/web-apps/current-work/multipage/parsing.html><abbr>HTML</abbr> をパースするアルゴリズム</a> を定義したのだ。もちろん、そのアルゴリズムにはどこにも、<abbr>HTML</abbr> の処理器が処理を止め、エラーメッセージをユーザーに見せるような処理は定義されていない。
+
+<p>このリバースエンジニアリング作業のかたわら、<abbr>WHAT</abbr> Working Group は他の作業も進めていた。ひとつは <abbr>HTML</abbr> フォームに新しいコントロールを追加する、もともと <a href=http://www.whatwg.org/specs/web-forms/current-work/>Web Forms 2.0</a> と呼ばれていた仕様だった。(フォームについては <a href=http://diveintohtml5.org/forms.html>A Form of Madness</a> でとりあげている。) もうひとつは <a href=http://diveintohtml5.org/canvas.html>ダイレクトモードの描画 API である Canvas</a> や <a href=http://diveintohtml5.org/video.html>プラグインなしで音声や動画を再生する要素</a> を定義した &#8220;Web Applications 1.0&#8221; と呼ばれる仕様だった。
+
+<p class=a>&#x2767;
+
+<h2 id=reinventing-html>Back to the W3C</h2>
+
+<p class=ss><img src=i/openclipart.org_johnny_automatic_a_dog_and_a_cat_with_an_umbrella.png width=356 height=329 alt="ネコとイヌの相合傘">
+
+<p>2 年半もの間、W3C と <abbr>WHAT</a> Working Group は互いを無視しあっていた。<abbr>WHAT</a> Working Group がフォームと新しい <abbr>HTML</abbr> の機能に勤しんでいる間、W3C HTML Working Group は XHTML 2.0 の策定に忙しかった。しかし 2006 年 10 月の段階で、<abbr>WHAT</a> Working Group の方に勢いがあるのは明らかだった。XHTML 2 はまだ草案段階であり、主要なブラウザで実装されてもいなかった。そして 2006 年 10 月、W3C の創設者である Tim Berners-Lee が新しい <abbr>HTML</abbr> について <a href=http://dig.csail.mit.edu/breadcrumbs/node/166>W3C が <abbr>WHAT</a> Working Group と共同して策定する可能性を示唆した</a> のだ。
+
+<blockquote data-orig-cite=http://dig.csail.mit.edu/breadcrumbs/node/166>
+<p>過去数年を振り返って明らかになったことがある。HTML の段階的な拡張が必要ということだ。属性値を引用符で囲み、空タグにスラッシュを書き、名前空間を使うといった XML への移行は一気には進まなかった。HTML を利用する多くのものはそのまま HTML を使い続けた。ブラウザがエラーメッセージを出さなかった体。いくつかの大きなコミュニティは移行をし、整形式のシステムの恩恵を受けているが、すべてではない。整形式の世界への誘いも続け、さらなる注力も行うが、その一方で HTML の段階的なメンテナンスも重要だ。
+<p>計画としては、まったく新しい HTML グループを組織する。これまでとは異なり、このグループは HTML とともに xHTML に対しても段階的な拡張を行う目的が与えられるだろう。このグループの提案については、ブラウザメーカーを始め多くの人間から賛同を得ている。
+<p>フォームの拡張もあるだろう。フォームは複雑だ。HTML のフォームと XForms はどちらもフォーム言語だからだ。HTML フォームは広く普及しており、XForms にも多くの実装がある。Webforms の提案は HTML フォームに機能拡張を施すものだ。計画としては、Webforms を参考とし、HTML フォームを拡張する。
+</blockquote>
+
+<p>新しく設立された W3C HTML Working Group が行った最初の決議は、&#8220;Web Applications 1.0&#8221; を &#8220;HTML5&#8221; へと改称することだった。ここにようやく <abbr>HTML5</abbr> が登場した。
+
+<p class=a>&#x2767;
+
+<h2 id=postscript>Postscript</h2>
+
+<p>2009 年 10 月、<abbr>W3C</abbr> は <a href=http://www.w3.org/News/2009#item119>XHTML 2 Working Group の活動を終了</a> させ、その <a href=http://www.w3.org/2009/06/xhtml-faq.html>決定に関する声明</a> を発表した。
+
+<blockquote cite=http://standards.mitsue.co.jp/resources/w3c/2009/06/xhtml-faq.html data-orig-cite=http://www.w3.org/2009/06/xhtml-faq.html>
+<p>2007 年 3 月に、W3C は HTML Working Group と、XHTML 2 Working Group という、ふたつのグループを設立しました。この際、私達は XHTML 2 の市場価値などを見ながら、今後について検討すると表明していました。
+<p>私達は、何年にもわたる XHTML 2 Working Group の活動と貢献をとても評価しています。しかし、参加者と話した結果、W3C は、2009 年末で失効する XHTML2 WG の憲章を改正しないことを決定しました。
+</blockquote>
+
+<p>実装されたものが勝つのだ。
+
+<p class=a>&#x2767;
+
+<h2 id=further-reading>Further Reading</h2>
+
+<ul>
+<li><a href=http://hixie.ch/commentary/web/history>The History of the Web</a> ― Ian Hickson による古いメモ
+<li><a href=http://esw.w3.org/topic/HTML/history>HTML/History</a>, by Michael Smith, Henri Sivonen, and others
+<li><a href=http://www.atendesigngroup.com/blog/brief-history-of-html>A Brief History of HTML</a>, by Scott Reynen
+</ul>
+
+<p class=a>&#x2767;
+
+<!--<p>This has been &#8220;How Did We Get Here?&#8221; The <a href=table-of-contents.html>full table of contents</a> has more if you&#8217;d like to keep reading.
+
+<div class=pf>
+<h4>Did You Know?</h4>
+<div class=moneybags>
+<blockquote><p>In association with Google Press, O&#8217;Reilly is distributing this book in a variety of formats, including paper, ePub, Mobi, and <abbr>DRM</abbr>-free <abbr>PDF</abbr>. The paid edition is called &#8220;HTML5: Up &amp; Running,&#8221; and it is available now. This chapter is included in the paid edition.
+<p>If you liked this chapter and want to show your appreciation, you can <a href="http://www.amazon.com/HTML5-Up-Running-Mark-Pilgrim/dp/0596806027?ie=UTF8&amp;tag=diveintomark-20&amp;creativeASIN=0596806027">buy &#8220;HTML5: Up &amp; Running&#8221; with this affiliate link</a> or <a href=http://oreilly.com/catalog/9780596806033>buy an electronic edition directly from O&#8217;Reilly</a>. You&#8217;ll get a book, and I&#8217;ll get a buck. I do not currently accept direct donations.
+</blockquote>
+</div>
+</div>-->
+
+<p>訳註：このページは <a href=http://diveintohtml5.org/>Dive Into HTML5</a> の <a href=http://diveintohtml5.org/past.html>&#8220;How Did We Get Here?&#8221;</a> の日本語訳です。
+
+<div class=pf>
+<h4>Did You Know?</h4>
+<div class=moneybags>
+<blockquote><p>原文が公開されている <a href=http://diveintohtml5.org/>Dive Into HTML5</a> というサイトは &#8220;HTML5: Up &amp; Running&#8221; という名前で Google Press より出版、O&#8217;Reilly Media より発売されています。(ePub, Mobi, <abbr>DRM</abbr>-free <abbr>PDF</abbr> など紙以外の媒体でも販売されています。)
+<p>原著を購入したい方はぜひ <a href="http://www.amazon.com/HTML5-Up-Running-Mark-Pilgrim/dp/0596806027?ie=UTF8&amp;tag=diveintomark-20&amp;creativeASIN=0596806027">著者のアフィリエイトリンク</a> から、もしくは <a href=http://oreilly.com/catalog/9780596806033>O&#8217;Reilly より電子版を購入</a> してください。
+<p>訳註：&#8220;HTML5: Up &amp; Running&#8221; の日本語訳はオライリー・ジャパンより<a href=http://www.oreilly.co.jp/books/9784873114828/>「入門 HTML5」</a>として発売されています。(注：本ページの訳者が監訳として関わっていますが、この翻訳文書は書籍と無関係です。)
+</blockquote>
+</div>
+</div>
+<p class=c>Copyright MMIX&ndash;MMXI <a href=about.html>Mark Pilgrim</a>
+<p class=c>翻訳: <a href="http://www.google.com/search?q=%E7%9F%A2%E5%80%89%E7%9C%9E%E9%9A%86+OR+%22Masataka+Yakura%22+OR+%22myakura%22">Masataka Yakura</a>
+
+<!--<form action=http://www.google.com/cse><div><input type=hidden name=cx value=014021643941856155761:6jgee_nxreo><input type=hidden name=ie value=UTF-8><input type=search name=q size=25 placeholder="powered by Google&trade;">&nbsp;<input type=submit name=sa value=Search></div></form>
+<script src=j/jquery.js></script>
+<script src=j/dih5.js></script>-->

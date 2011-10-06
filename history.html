@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<meta charset=utf-8>
+<title>History API - Dive Into HTML5 (日本語訳)</title>
+<!--[if lt IE 9]><script src=j/html5.js></script><![endif]-->
+<!--link rel="shortcut icon" href=favicon.ico-->
+<!--link rel=alternate type=application/atom+xml href=http://hg.diveintohtml5.org/hgweb.cgi/atom-log-->
+<link rel=stylesheet href=screen.css>
+<style>
+body{counter-reset:h1 11}
+</style>
+<link rel=stylesheet media='only screen and (max-device-width: 480px)' href=mobile.css>
+<style>
+body {
+  line-height: 1.9;
+}
+</style>
+<!--<p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#history>Dive Into <abbr>HTML5</abbr></a> <span class=u>&#8227;</span>-->
+<h1><br>Manipulating History<br>for Fun &amp; Profit</h1>
+<p id=toc>&nbsp;
+<p class=a>&#x2767;
+<h2 id=divingin>Diving In</h2>
+
+<p class=f>ブラウザのロケーションバーは世にある UI のなかで最もギークなもののひとつだろう。<abbr>URL</abbr> はビルボードや電車の車体、はたまたグラフィティにまで現れる。戻るボタン (ブラウザでもっとも重要なものだ) と組み合わせれば、Web と呼ばれる複雑に絡みあったリソースの集合を行き来するとても強力な手段となる。
+
+<p><a href=http://www.whatwg.org/specs/web-apps/current-work/multipage/history.html><abbr>HTML5</abbr> の History <abbr>API</abbr></a> はブラウザのヒストリ情報をスクリプトから操作する機能だ。この <abbr>API</abbr> の一部にはヒストリを行き来する機能があるが、これは以前の <abbr>HTML</abbr> の頃より存在していた。<abbr>HTML5</abbr> では、ブラウザのヒストリにエントリを追加する機能、ページの更新なしにロケーションバーの <abbr>URL</abbr> を書きかえる機能、ユーザーが戻るボタンを押しそのエントリがスタックから削除される際に発火されるイベントなどが新しく追加された。これによって、ロケーションバー中の <abbr>URL</abbr> は、ページの全部を更新しないようなスクリプトごりごりのアプリケーションにおいても、現在のリソースに結び付けられた一意な識別子という性質を維持できるのだ。
+
+<p class=a>&#x2767;
+
+<h2 id=why>The Why</h2>
+
+<p class=ss style="float:left;margin:0 1.75em 1.75em 0;width:218px"><img src=i/openclipart.org_johnny_automatic_demon_reading_Stewart_Orr.png alt="本読みデーモン" width=218 height=231>
+
+<p>一体なぜ、ブラウザのロケーションバーを操作する必要があるのだろうか。リンクから別の <abbr>URL</abbr> へ飛ぶ。これはその始まりから今日までの 20 年間ずっと続く、Web のもっとも基本的な仕組みだ。そして、これからも変わることはない。この <abbr>API</abbr> は Web を破壊するものなんかではないのだ。むしろその逆だ。近年、Web 開発者は Web をひっくり返す面白い方法を、標準の助けなしに見つけてしまった。<abbr>HTML5</abbr> の History <abbr>API</abbr> は、スクリプトごりごりの Web アプリケーションでも <abbr>URL</abbr> が変わらず機能し続けることを保証するために用意されているのだ。
+
+<p>最初の原則に立ち返ってみよう。<abbr>URL</abbr> はなにをするものだろうか。リソースを一意に識別するものだ。この役割のおかげで、リソースを直接リンクすることやブックマークすることができる。検索エンジンはリソースをインデックスできる。<abbr>URL</abbr> をコピーしメールに貼りつけ誰かに送れば、送り相手はそれをクリックしてあなたが見たリソースと同じものを見られる。そんなすばらしい役割があるのだ。<abbr>URL</abbr> は偉大だ。
+
+<p>一意なリソースには一意な <abbr>URL</abbr> があってほしいものだ。しかし、ブラウザには根本的な欠陥がある。<abbr>URL</abbr> を変更すると、たとえスクリプトを使ったとしても、変更したことで Web サーバへの接続が行われ、ページが更新されてしまうのだ。これは時間やリソースを使うし、なにより現在のページが、移動先のページとほとんど同じである場合はとても無駄になる。移動先のページにあるすべてがダウンロードされてしまう。<abbr>URL</abbr> を変えて、でもページの半分しかダウンロードするなとブラウザに伝える、そんな方法は存在しなかった。
+
+<p><abbr>HTML5</abbr> の History <abbr>API</abbr> を使えば、それを実現できる。ページを完全に更新するのではなく、基本的にはスクリプトを使って部分的にページをダウンロードするのだ。このイリュージョンを見破るのは難しいし、ページにタネを仕込む必要もある。ではご覧いただこう。見逃さないように。
+
+<p class=ss><img src=i/openclipart.org_johnny_automatic_card_trick.png width=287 height=238 alt="カードトリックを披露するマジシャン">
+
+<p id=illusion>ここに A と B という2つのページがある。2つのページの90％は同じ内容だが、残りの10％はそれぞれ異なっている。ユーザーはページ A にアクセスした後、ページ B にアクセスする。このとき、ページを更新するのではなく、そのページ遷移を妨害し次に記すステップを実行する。
+
+<ol>
+<li><em>ページの10％をロードする。</em>多分 <code>XMLHttpRequest</code> を使って、ページ A とページ B の異なる部分だけをロードする。これをするにはサーバーサイドに多少の変更が必要になるだろう。ページ A とページ B の異なる10％の部分だけを返すコードを書くのだ。実装は隠れた <abbr>URL</abbr> やクエリパラメータなど、エンドユーザーが普段見ないものでよいだろう。
+<li><em>ダウンロードした異なる部分を入れ替える。</em>(<code>innerHTML</code> や他の <code>DOM</code> メソッドを利用するだろう。) 入れ替わった内容のイベントハンドラをリセットしないといけない場合が出てくるかもしれない。
+<li><em>ブラウザのロケーションバーをページ B の <code>URL</code> に更新する。</em>これには <code>HTML5</code> の History <abbr>API</code> を利用する。
+</ol>
+
+<p>このイリュージョンの終わりには、ブラウザはページ B に直接移動したかのように、そのページと同じ <abbr>DOM</abbr> を持つことになる。ロケーションバーも同じくページ B の <abbr>URL</abbr> を持つ。しかし、実際にはページ B にアクセスしてはおらず、そしてページは更新されもしない。これがマジックなのだ。しかし「合成した」そのページはページ B と同じに見えるし、<abbr>URL</abbr> もページ B と同じだ。ユーザーがその違いに気づくことはないだろう (その体験を提供するためにあなたがしたことに感謝することもないだろう)。
+
+<p class=a>&#x2767;
+
+<h2 id=how>The How</h2>
+
+<p><abbr>HTML5</abbr> の History <abbr>API</abbr> は <code>window.history</code> オブジェクトにいくつか用意されたメソッドと <code>window</code> オブジェクトに追加された1つのイベントから構成される。これらを利用すれば <a href=http://diveintohtml5.org/detect.html#history>History <abbr>API</abbr> のサポートを検出</a> できる。サポートはいくつかのブラウザの最新バージョンに限定されるため、&#8220;Progressive Enhancement&#8221; な使い方が前提となる。
+
+<table class=bc>
+<caption>history.pushState support</caption>
+<thead>
+<tr><th title="Internet Explorer">IE<th title="Mozilla Firefox">Firefox<th title="Apple Safari">Safari<th title="Google Chrome">Chrome<th>Opera<th>iPhone<th>Android
+</thead>
+<tbody>
+<tr><td>&middot;<td>4.0+<td>5.0+<td>8.0+<td>11.10+<td>4.2.1+<td>&middot;
+</tbody>
+</table>
+
+<p><a href=http://diveintohtml5.org/examples/history/fer.html>dive into dogs</a> は何の変哲もないが、作るのはそこまで簡単でない、<abbr>HTML5</abbr> の History <abbr>API</abbr> を利用したサンプルだ。長めの記事と、インラインのフォトギャラリーというよくあるパターンで構成されている。サポートされたブラウザでは、フォトギャラリー中の Next と Previous というリンクをクリックすると、写真が置き換えられ、<em>さらにブラウザのロケーションバーにある <abbr>URL</abbr> も更新される</em>。しかし、ページ全体が更新されるわけではない。サポートされていないブラウザや、スクリプトを無効にしたブラウザにおいて、これらのリンクは通常のリンクとして扱われるため、新しいページに移動することになる。もちろん、新しいページなので、全体が更新される。
+
+<p>最後の2文が、とくに重要だ。
+
+<div class=pf>
+<h4>Professor Markup Says</h4>
+<div class=inner>
+<blockquote><p>スクリプトを無効にしたブラウザで君の Web アプリケーションが動作しなかったら、どこからともなくニールセン博士の犬が君のところにやってきて、カーペットに粗相でもするだろうね。
+</blockquote>
+</div>
+</div>
+
+<p id=gallery-markup>では、<a href=http://diveintohtml5.org/examples/history/fer.html>dive into dogs</a> のデモを詳しく見ていこう。写真を表示している箇所のマークアップは次のようになっている。
+
+<p class="legend top" style="padding-left:6em"><span class=arrow>&#x21b6;</span> The pledge
+<pre><code>&lt;aside id="gallery">
+  &lt;p class="photonav">
+    &lt;a id="photonext" href="casey.html">Next &amp;gt;&lt;/a>
+    &lt;a id="photoprev" href="adagio.html">&amp;lt; Previous&lt;/a>
+  &lt;/p>
+  &lt;figure id="photo">
+    &lt;img id="photoimg" src="gallery/1972-fer-500.jpg"
+            alt="Fer" width="500" height="375">
+    &lt;figcaption>Fer, 1972&lt;/figcaption>
+  &lt;/figure>
+&lt;/aside></code></pre>
+
+<p>何らおかしなところは見当たらない。写真は <code>&lt;figure></code> 内の <code>&lt;img></code> で、リンクは普通の <code>&lt;a></code> 要素、写真やそのコントロールは <code>&lt;aside></code> で囲まれている。リンクが普通に機能することは重要だ。次に記すすべてのコードは <a href=http://diveintohtml5.org/detect.html#history>検出スクリプト</a> のもと機能する。サポートしないブラウザでは、History <abbr>API</abbr> のコードは実行されない。スクリプトを無効にしたユーザーは、かならず一定数存在するのだ。
+
+<p>スクリプトのメイン関数は、上記のリンクを取得し <code>addClickr()</code> という <code>click</code> ハンドラを独自に設定する関数に渡す作業を行う。
+
+<pre><code>function setupHistoryClicks() {
+  addClicker(document.getElementById("photonext"));
+  addClicker(document.getElementById("photoprev"));
+}</code></pre>
+
+<p>これが <code>addClicker()</code> 関数だ。この関数は <code>&lt;a></code> 要素を受け取り、それに <code>click</code> ハンドラを与える。この <code>click</code> ハンドラの中身から、スクリプトが面白くなってくる。
+
+<pre style="float:left"><code>function addClicker(link) {
+  link.addEventListener("click", function(e) {
+    swapPhoto(link.href);
+    history.pushState(null, null, link.href);
+    e.preventDefault();
+  }, false);
+}</code></pre>
+<p class="legend right" style="margin-top:5em"><span class=arrow>&nbsp;&#x219c;</span> Interesting
+
+<p style="clear:left"><code>swapPhoto()</code> 関数が、先ほど説明した <a href=#illusion>3ステップのイリュージョン</a> のうち、1番目と2番目を担当する。<code>swapPhoto()</code> の前半分は、ナビゲーションリンクの <abbr>URL</abbr> の一部 (<code>casey.html</code> や <code>adagio.html</code> など) を受け取り、次の写真を表示するために必要なマークアップのみを持ったページの <abbr>URL</abbr> を作成する。
+
+<pre><code>function swapPhoto(href) {
+  var req = new XMLHttpRequest();
+  req.open("GET",
+           "http://diveintohtml5.org/examples/history/gallery/" +
+             href.split("/").pop(),
+           false);
+  req.send(null);</code></pre>
+
+<p>次に示すのは <code><a href=http://diveintohtml5.org/examples/history/gallery/casey.html>http://diveintohtml5.org/examples/history/gallery/casey.html</a></code> が返すマークアップだ。(<abbr>URL</abbr> に直接アクセスすれば、ちゃんと同じものが帰ってくるかを確かめることができる。)
+
+<pre><code>&lt;p class="photonav">
+  &lt;a id="photonext" href="brandy.html">Next &amp;gt;&lt;/a>
+  &lt;a id="photoprev" href="fer.html">&amp;lt; Previous&lt;/a>
+&lt;/p>
+&lt;figure id="photo">
+  &lt;img id="photoimg" src="gallery/1984-casey-500.jpg"
+          alt="Casey" width="500" height="375">
+  &lt;figcaption>Casey, 1984&lt;/figcaption>
+&lt;/figure></code></pre>
+
+<p>見覚えがあるのではないだろうか。そう、このマークアップは1枚目の写真を表示する <a href=#gallery-markup>もとのページのマークアップと基本的に同じもの</a> だ。
+
+<p><code>swapPhoto()</code> 関数の後半が、イリュージョンのうち2番目のステップを実行する。新しくダウンロードしたマークアップを現在のページに挿入するのだ。先ほどのコードを覚えているだろうか。ナビゲーション、写真、キャプションは <code>&lt;aside></code> に囲まれている。なので、新しい写真の挿入は <code>XMLHttpRequest</code> から返ってきた <code>responseText</code> プロパティを、<code>&lt;aside></code> の <code>innerHTML</code> プロパティに設定するだけで済む。
+
+<pre><code>  if (req.status == 200) {
+    document.getElementById("gallery").innerHTML = req.responseText;
+    setupHistoryClicks();
+    return true;
+  }
+  return false;
+}</code></pre>
+
+<p>(<code>setupHistoryClicks()</code> を呼び出していることにも注目だ。これは新しく挿入されたナビゲーションリンクの <code>click</code> イベントハンドラをリセットするものだ。<code>innerHTML</code> をセットすると、古いリンクの痕跡やそのリンクに与えられたイベントハンドラが消去される。)
+
+<p><code>addClicker()</code> 関数に戻ろう。さて、これまで説明したのは <a href=#illusion>3ステップのイリュージョン</a> なのを覚えているだろうか。つまり、写真を入れ替えることに成功したあと、もうひとつ実行しなければならないステップがあるのだ。ページを更新せずに、ロケーションバーの <abbr>URL</abbr> をセットするのだ。
+
+<p class="legend top" style="padding-left:6em"><span class=arrow>&#x21b6;</span> The turn
+<pre><code>history.pushState(null, null, link.href);</code></pre>
+
+<p><code>history.pushState()</code> 関数は3つの引数をとる。
+
+<ol>
+<li><code>state</code> ―  <abbr>JSON</abbr> データ構造であるものであれば何でもよい。オブジェクトはこの後すぐ説明する <code>popstate</code> イベントハンドラに渡される。このデモでは何の状態も追跡する必要がないので、ここでは <code>null</code> としている。
+<li><code>title</code> ―  どんな文字列でもよい。この引数は現時点でどのブラウザでも利用されていない。ページタイトルをセットしたい場合は、<code>state</code> 引数に格納し、<code>popstate</code> のコールバックから手動で指定するしかない。
+<li><code>url</code> ―  どんな <abbr>URL</abbr> でもよい。ここに指定したものが、ロケーションバーに現れる <abbr>URL</abbr> となる。
+</ol>
+
+<p><code>history.pushState</code> を呼ぶとすぐさまロケーションバーの <abbr>URL</abbr> が変更される。では、これでイリュージョンは終わりだろうか。残念ながらそうではない。ユーザーがあの重要な戻るボタンを押した時の挙動について考えなくてはならないからだ。
+
+<p>ユーザーが新しいページへ移動した時 (ページも更新されたとき)、ブラウザはヒストリのスタックに <abbr>URL</abbr> をプッシュし、ページをダウンロードし、そして描画する。ユーザーが戻るボタンを押すと、ヒストリスタックからページをポップし、前のページを再描画する。しかし、ページの更新なしにページを入れ替えた今の場合において、ユーザーが戻るボタンを押した際にはどうなるのだろうか。つまり、サンプルでは「進む」挙動を偽証し、新しい <abbr>URL</abbr> に移動している。つまり、「戻る」についても同様に、前の <abbr>URL</abbr> へ移動する際に挙動を偽証しなければいけないのだ。そしてその鍵は、<code>popstate</code> イベントが握っている。
+
+<p class="legend top" style="padding-left:6em"><span class=arrow>&#x21b6;</span> The prestige
+<pre><code>window.addEventListener("popstate", function(e) {
+    swapPhoto(location.pathname);
+}</code></pre>
+
+<p><code>history.pushState()</code> 関数を使い、ブラウザのヒストリスタックに偽の <abbr>URL</abbr> をプッシュした後、ユーザーが戻るボタンを押すと、ブラウザは <code>popstate</code> イベントを <code>window</code> オブジェクトから発火する。ここでちゃんとするかしないかで、イリュージョンの成功が決まってしまう。何かを消すだけでは成功とは言えない、それをもとに戻してこそイリュージョンだろう。
+
+<p>今回のデモにおいて「もとに戻す」ことは簡単だ。<code>swapPhoto()</code> にもとの <abbr>URL</abbr> を与え、もとの写真を呼び出せばよいだけだ。<code>popstate</code> コールバックが呼び出されるころには、ロケーションバーの <abbr>URL</abbr> は前の <abbr>URL</abbr> に変わっているだろう。また、<code>location</code> プロパティもすでに前の <abbr>URL</abbr> に更新しているだろう。
+
+<p>では、イリュージョンがどう起こったのかを、その最初から最後までまとめて説明しよう。
+
+<ul>
+<li>ユーザーが <code><a href=http://diveintohtml5.org/examples/history/fer.html>http://diveintohtml5.org/examples/history/fer.html</a></code> にアクセスし、本文と Fer の写真を見る。
+<li>ユーザーが &#8220;Next&#8221; と書かれたリンクをクリックする。リンクは <code>href</code> プロパティに <code><a href=http://diveintohtml5.org/examples/history/casey.html>http://diveintohtml5.org/examples/history/casey.html</a></code> を持つ <code>&lt;a></code> 要素だ。
+<li><code><a href=http://diveintohtml5.org/examples/history/casey.html>http://diveintohtml5.org/examples/history/casey.html</a></code> への移動とページの更新が発生する代わりに、<code>&lt;a></code> 要素に与えられた <code>click</code> ハンドラがもとのクリックを妨害し、自前のコードを実行する。
+<li>自前で用意した <code>click</code> ハンドラは <code>swapPhoto()</code> 関数を実行する。この関数は <code>XMLHttpRequest</code> オブジェクトを生成し、 <code><a href=http://diveintohtml5.org/examples/history/gallery/casey.html>http://diveintohtml5.org/examples/history/<strong>gallery</strong>/casey.html</a></code> にある <abbr>HTML</abbr> の一部を同期的にダウンロードする。
+<li><code>swapPhoto()</code> 関数はフォトギャラリーの囲み (<code>&lt;aside></code> 要素) の <code>innerHTML</code> プロパティを入れ替える。この場合は Fer の写真とキャプションを、Casey の写真とキャプションに変更する。
+<li>自前の <code>click</code> ハンドラは <code>history.pushState()</code> 関数を呼び出し、ロケーションバーの <abbr>URL</abbr> を <code><a href=http://diveintohtml5.org/examples/history/casey.html>http://diveintohtml5.org/examples/history/casey.html</a></code> に書きかえる。
+<li>ユーザーがブラウザの戻るボタンをクリックする。
+<li>ブラウザは (<code>history.pushState()</code> によって) ヒストリスタックに <abbr>URL</abbr> が手動でプッシュされたことに気づく。もとの <abbr>URL</abbr> への移動とページ全体の再描画が発生する代わりに、ブラウザはロケーションバーをもとの <abbr>URL</abbr> (<code><a href=http://diveintohtml5.org/examples/history/fer.html>http://diveintohtml5.org/examples/history/fer.html</a></code>) に書き換え、そして <code>popstate</code> イベントを発生させる。
+<li>自前の <code>popstate</code> ハンドラが <code>swapPhoto()</code> を再度呼び出す。引数には、ロケーションバーではすでに書き変わっている、もとのページの <abbr>URL</abbr> が与えられる。
+<li><code>swapPhoto()</code> 関数は <code>XMLHttpRequest</code> を使用し <code><a href=http://diveintohtml5.org/examples/history/gallery/fer.html>http://diveintohtml5.org/examples/history/<strong>gallery</strong>/fer.html</a></code> にある <abbr>HTML</abbr> の一部をダウンロードし、その内容を <code>&lt;aside></code> 要素の <code>innerHTML</code> プロパティにセットする。Casey の写真とキャプションが、Fer の写真とキャプションに変更される。
+</ul>
+
+<p>イリュージョンは成功だ。ページ内容とロケーションバーの <abbr>URL</abbr> を見ると、まるでユーザーはあるページから別のページを行き来しているようだ。しかし、ページ全体が更新されているわけではない。これは細かいトリックを組み合わせたイリュージョンなのだ。
+
+<p class=a>&#x2767;
+
+<h2 id=further-reading>Further Reading</h2>
+
+<ul>
+<li><a href=http://www.whatwg.org/specs/web-apps/current-work/multipage/history.html>Session history and navigation</a> in the <abbr>HTML5</abbr> draft standard
+<li><a href=https://developer.mozilla.org/en/DOM/Manipulating_the_browser_history>Manipulating the browser history</a> on Mozilla Developer Center
+<li><a href=http://html5demos.com/history>Simple history <abbr>API</abbr> demo</a>
+<li><a href=http://www.20thingsilearned.com/>20 Things I Learned About Browsers and the Web</a>, an advanced demo that uses the history <abbr>API</abbr> and other <abbr>HTML5</abbr> techniques
+<li><a href="http://www.facebook.com/note.php?note_id=438532093919">Using <abbr>HTML5</abbr> today</a> describes <a href=http://www.facebook.com/>Facebook&#8217;s</a> use of the history <abbr>API</abbr>
+<li><a href=https://github.com/blog/760-the-tree-slider>The Tree Slider</a> describes <a href=https://github.com/>Github&#8217;s</a> use of the history <abbr>API</abbr>
+<li><a href=https://github.com/balupton/History.js/>History.js</a>, a meta-<abbr>API</abbr> for manipulating history in both newer and older browsers
+</ul>
+
+<p class=a>&#x2767;
+
+<!--<p>This has been &#8220;Manipulating History for Fun <i>&amp;</i> Profit.&#8221; The <a href=table-of-contents.html>full table of contents</a> has more if you&#8217;d like to keep reading.
+
+<div class=pf>
+<h4>Did You Know?</h4>
+<div class=moneybags>
+<blockquote><p>In association with Google Press, O&#8217;Reilly is distributing this book in a variety of formats, including paper, ePub, Mobi, and <abbr>DRM</abbr>-free <abbr>PDF</abbr>. The paid edition is called &#8220;HTML5: Up &amp; Running,&#8221; and it is available now. This chapter is not yet included in the paid edition, so consider it a bonus.
+<p>If you liked this chapter and want to show your appreciation, you can <a href="http://www.amazon.com/HTML5-Up-Running-Mark-Pilgrim/dp/0596806027?ie=UTF8&amp;tag=diveintomark-20&amp;creativeASIN=0596806027">buy &#8220;HTML5: Up &amp; Running&#8221; with this affiliate link</a> or <a href=http://oreilly.com/catalog/9780596806033>buy an electronic edition directly from O&#8217;Reilly</a>. You&#8217;ll get a book, and I&#8217;ll get a buck. I do not currently accept direct donations.
+</blockquote>
+</div>
+</div>-->
+
+<p>訳註：このページは <a href=http://diveintohtml5.org/>Dive Into HTML5</a> の <a href=http://diveintohtml5.org/history.html>&#8220;Manipulating History for Fun <i>&amp;</i> Profit&#8221;</a> の日本語訳です。
+
+<div class=pf>
+<h4>Did You Know?</h4>
+<div class=moneybags>
+<blockquote><p>原文が公開されている <a href=http://diveintohtml5.org/>Dive Into HTML5</a> というサイトは &#8220;HTML5: Up &amp; Running&#8221; という名前で Google Press より出版、O&#8217;Reilly Media より発売されています。(ePub, Mobi, <abbr>DRM</abbr>-free <abbr>PDF</abbr> など紙以外の媒体でも販売されています。)
+<p>原著を購入したい方はぜひ <a href="http://www.amazon.com/HTML5-Up-Running-Mark-Pilgrim/dp/0596806027?ie=UTF8&amp;tag=diveintomark-20&amp;creativeASIN=0596806027">著者のアフィリエイトリンク</a> から、もしくは <a href=http://oreilly.com/catalog/9780596806033>O&#8217;Reilly より電子版を購入</a> してください。
+<p>訳註：&#8220;HTML5: Up &amp; Running&#8221; の日本語訳はオライリー・ジャパンより<a href=http://www.oreilly.co.jp/books/9784873114828/>「入門 HTML5」</a>として発売されています。(注：本ページの訳者が監訳として関わっていますが、この翻訳文書は書籍と無関係です。また、この元ページは &#8220;HTML5: Up &amp; Running&#8221; には含まれていません。)
+</blockquote>
+</div>
+</div>
+<p class=c>Copyright MMIX&ndash;MMXI <a href=about.html>Mark Pilgrim</a>
+<p class=c>翻訳: <a href="http://www.google.com/search?q=%E7%9F%A2%E5%80%89%E7%9C%9E%E9%9A%86+OR+%22Masataka+Yakura%22+OR+%22myakura%22">Masataka Yakura</a>
+
+<!--<form action=http://www.google.com/cse><div><input type=hidden name=cx value=014021643941856155761:6jgee_nxreo><input type=hidden name=ie value=UTF-8><input type=search name=q size=25 placeholder="powered by Google&trade;">&nbsp;<input type=submit name=sa value=Search></div></form>
+<script src=j/jquery.js></script>
+<script src=j/modernizr.js></script>
+<script src=j/dih5.js></script>-->

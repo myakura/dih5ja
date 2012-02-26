@@ -2,8 +2,7 @@
 <meta charset=utf-8>
 <title>History API - Dive Into HTML5 (日本語訳)</title>
 <!--[if lt IE 9]><script src=j/html5.js></script><![endif]-->
-<link rel="shortcut icon" href=favicon.ico>
-<!--link rel=alternate type=application/atom+xml href=http://hg.diveintohtml5.org/hgweb.cgi/atom-log-->
+<!--link rel=alternate type=application/atom+xml href=https://github.com/diveintomark/diveintohtml5/commits/master.atom-->
 <link rel=stylesheet href=screen.css>
 <style>
 body{counter-reset:h1 11}
@@ -65,19 +64,17 @@ body {
 
 <h2 id=how>The How</h2>
 
-<p><abbr>HTML5</abbr> の History <abbr>API</abbr> は <code>window.history</code> オブジェクトにいくつか用意されたメソッドと <code>window</code> オブジェクトに追加された1つのイベントから構成される。これらを利用すれば <a href=http://diveintohtml5.org/detect.html#history>History <abbr>API</abbr> のサポートを検出</a> できる。サポートはいくつかのブラウザの最新バージョンに限定されるため、&#8220;Progressive Enhancement&#8221; な使い方が前提となる。
+<p><abbr>HTML5</abbr> の History <abbr>API</abbr> は <code>window.history</code> オブジェクトにいくつか用意されたメソッドと <code>window</code> オブジェクトに追加された1つのイベントから構成される。これらを利用すれば <a href=http://diveintohtml5.info/detect.html#history>History <abbr>API</abbr> のサポートを検出</a> できる。サポートはいくつかのブラウザの最新バージョンに限定されるため、&#8220;Progressive Enhancement&#8221; な使い方が前提となる。
 
 <table class=bc>
 <caption>history.pushState support</caption>
 <thead>
 <tr><th title="Internet Explorer">IE<th title="Mozilla Firefox">Firefox<th title="Apple Safari">Safari<th title="Google Chrome">Chrome<th>Opera<th>iPhone<th>Android
-</thead>
 <tbody>
 <tr><td>&middot;<td>4.0+<td>5.0+<td>8.0+<td>11.50+<td>4.2.1+<td>&middot;
-</tbody>
 </table>
 
-<p><a href=http://diveintohtml5.org/examples/history/fer.html>dive into dogs</a> は何の変哲もないが、作るのはそこまで簡単でない、<abbr>HTML5</abbr> の History <abbr>API</abbr> を利用したサンプルだ。長めの記事と、インラインのフォトギャラリーというよくあるパターンで構成されている。サポートされたブラウザでは、フォトギャラリー中の Next と Previous というリンクをクリックすると、写真が置き換えられ、<em>さらにブラウザのロケーションバーにある <abbr>URL</abbr> も更新される</em>。しかし、ページ全体が更新されるわけではない。サポートされていないブラウザや、スクリプトを無効にしたブラウザにおいて、これらのリンクは通常のリンクとして扱われるため、新しいページに移動することになる。もちろん、新しいページなので、全体が更新される。
+<p><a href=http://diveintohtml5.info/examples/history/fer.html>dive into dogs</a> は何の変哲もないが、作るのはそこまで簡単でない、<abbr>HTML5</abbr> の History <abbr>API</abbr> を利用したサンプルだ。長めの記事と、インラインのフォトギャラリーというよくあるパターンで構成されている。サポートされたブラウザでは、フォトギャラリー中の Next と Previous というリンクをクリックすると、写真が置き換えられ、<em>さらにブラウザのロケーションバーにある <abbr>URL</abbr> も更新される</em>。しかし、ページ全体が更新されるわけではない。サポートされていないブラウザや、スクリプトを無効にしたブラウザにおいて、これらのリンクは通常のリンクとして扱われるため、新しいページに移動することになる。もちろん、新しいページなので、全体が更新される。
 
 <p>最後の2文が、とくに重要だ。
 
@@ -89,7 +86,7 @@ body {
 </div>
 </div>
 
-<p id=gallery-markup>では、<a href=http://diveintohtml5.org/examples/history/fer.html>dive into dogs</a> のデモを詳しく見ていこう。写真を表示している箇所のマークアップは次のようになっている。
+<p id=gallery-markup>では、<a href=http://diveintohtml5.info/examples/history/fer.html>dive into dogs</a> のデモを詳しく見ていこう。写真を表示している箇所のマークアップは次のようになっている。
 
 <p class="legend top" style="padding-left:6em"><span class=arrow>&#x21b6;</span> The pledge
 <pre><code>&lt;aside id="gallery">
@@ -104,7 +101,7 @@ body {
   &lt;/figure>
 &lt;/aside></code></pre>
 
-<p>何らおかしなところは見当たらない。写真は <code>&lt;figure></code> 内の <code>&lt;img></code> で、リンクは普通の <code>&lt;a></code> 要素、写真やそのコントロールは <code>&lt;aside></code> で囲まれている。リンクが普通に機能することは重要だ。次に記すすべてのコードは <a href=http://diveintohtml5.org/detect.html#history>検出スクリプト</a> のもと機能する。サポートしないブラウザでは、History <abbr>API</abbr> のコードは実行されない。スクリプトを無効にしたユーザーは、かならず一定数存在するのだ。
+<p>何らおかしなところは見当たらない。写真は <code>&lt;figure></code> 内の <code>&lt;img></code> で、リンクは普通の <code>&lt;a></code> 要素、写真やそのコントロールは <code>&lt;aside></code> で囲まれている。リンクが普通に機能することは重要だ。次に記すすべてのコードは <a href=http://diveintohtml5.info/detect.html#history>検出スクリプト</a> のもと機能する。サポートしないブラウザでは、History <abbr>API</abbr> のコードは実行されない。スクリプトを無効にしたユーザーは、かならず一定数存在するのだ。
 
 <p>スクリプトのメイン関数は、上記のリンクを取得し <code>addClickr()</code> という <code>click</code> ハンドラを独自に設定する関数に渡す作業を行う。
 
@@ -129,12 +126,12 @@ body {
 <pre><code>function swapPhoto(href) {
   var req = new XMLHttpRequest();
   req.open("GET",
-           "http://diveintohtml5.org/examples/history/gallery/" +
+           "http://diveintohtml5.info/examples/history/gallery/" +
              href.split("/").pop(),
            false);
   req.send(null);</code></pre>
 
-<p>次に示すのは <code><a href=http://diveintohtml5.org/examples/history/gallery/casey.html>http://diveintohtml5.org/examples/history/gallery/casey.html</a></code> が返すマークアップだ。(<abbr>URL</abbr> に直接アクセスすれば、ちゃんと同じものが帰ってくるかを確かめることができる。)
+<p>次に示すのは <code><a href=http://diveintohtml5.info/examples/history/gallery/casey.html>http://diveintohtml5.info/examples/history/gallery/casey.html</a></code> が返すマークアップだ。(<abbr>URL</abbr> に直接アクセスすれば、ちゃんと同じものが帰ってくるかを確かめることができる。)
 
 <pre><code>&lt;p class="photonav">
   &lt;a id="photonext" href="brandy.html">Next &amp;gt;&lt;/a>
@@ -189,16 +186,16 @@ body {
 <p>では、イリュージョンがどう起こったのかを、その最初から最後までまとめて説明しよう。
 
 <ul>
-<li>ユーザーが <code><a href=http://diveintohtml5.org/examples/history/fer.html>http://diveintohtml5.org/examples/history/fer.html</a></code> にアクセスし、本文と Fer の写真を見る。
-<li>ユーザーが &#8220;Next&#8221; と書かれたリンクをクリックする。リンクは <code>href</code> プロパティに <code><a href=http://diveintohtml5.org/examples/history/casey.html>http://diveintohtml5.org/examples/history/casey.html</a></code> を持つ <code>&lt;a></code> 要素だ。
-<li><code><a href=http://diveintohtml5.org/examples/history/casey.html>http://diveintohtml5.org/examples/history/casey.html</a></code> への移動とページの更新が発生する代わりに、<code>&lt;a></code> 要素に与えられた <code>click</code> ハンドラがもとのクリックを妨害し、自前のコードを実行する。
-<li>自前で用意した <code>click</code> ハンドラは <code>swapPhoto()</code> 関数を実行する。この関数は <code>XMLHttpRequest</code> オブジェクトを生成し、 <code><a href=http://diveintohtml5.org/examples/history/gallery/casey.html>http://diveintohtml5.org/examples/history/<strong>gallery</strong>/casey.html</a></code> にある <abbr>HTML</abbr> の一部を同期的にダウンロードする。
+<li>ユーザーが <code><a href=http://diveintohtml5.info/examples/history/fer.html>http://diveintohtml5.info/examples/history/fer.html</a></code> にアクセスし、本文と Fer の写真を見る。
+<li>ユーザーが &#8220;Next&#8221; と書かれたリンクをクリックする。リンクは <code>href</code> プロパティに <code><a href=http://diveintohtml5.info/examples/history/casey.html>http://diveintohtml5.info/examples/history/casey.html</a></code> を持つ <code>&lt;a></code> 要素だ。
+<li><code><a href=http://diveintohtml5.info/examples/history/casey.html>http://diveintohtml5.info/examples/history/casey.html</a></code> への移動とページの更新が発生する代わりに、<code>&lt;a></code> 要素に与えられた <code>click</code> ハンドラがもとのクリックを妨害し、自前のコードを実行する。
+<li>自前で用意した <code>click</code> ハンドラは <code>swapPhoto()</code> 関数を実行する。この関数は <code>XMLHttpRequest</code> オブジェクトを生成し、 <code><a href=http://diveintohtml5.info/examples/history/gallery/casey.html>http://diveintohtml5.info/examples/history/<strong>gallery</strong>/casey.html</a></code> にある <abbr>HTML</abbr> の一部を同期的にダウンロードする。
 <li><code>swapPhoto()</code> 関数はフォトギャラリーの囲み (<code>&lt;aside></code> 要素) の <code>innerHTML</code> プロパティを入れ替える。この場合は Fer の写真とキャプションを、Casey の写真とキャプションに変更する。
-<li>自前の <code>click</code> ハンドラは <code>history.pushState()</code> 関数を呼び出し、ロケーションバーの <abbr>URL</abbr> を <code><a href=http://diveintohtml5.org/examples/history/casey.html>http://diveintohtml5.org/examples/history/casey.html</a></code> に書きかえる。
+<li>自前の <code>click</code> ハンドラは <code>history.pushState()</code> 関数を呼び出し、ロケーションバーの <abbr>URL</abbr> を <code><a href=http://diveintohtml5.info/examples/history/casey.html>http://diveintohtml5.info/examples/history/casey.html</a></code> に書きかえる。
 <li>ユーザーがブラウザの戻るボタンをクリックする。
-<li>ブラウザは (<code>history.pushState()</code> によって) ヒストリスタックに <abbr>URL</abbr> が手動でプッシュされたことに気づく。もとの <abbr>URL</abbr> への移動とページ全体の再描画が発生する代わりに、ブラウザはロケーションバーをもとの <abbr>URL</abbr> (<code><a href=http://diveintohtml5.org/examples/history/fer.html>http://diveintohtml5.org/examples/history/fer.html</a></code>) に書き換え、そして <code>popstate</code> イベントを発生させる。
+<li>ブラウザは (<code>history.pushState()</code> によって) ヒストリスタックに <abbr>URL</abbr> が手動でプッシュされたことに気づく。もとの <abbr>URL</abbr> への移動とページ全体の再描画が発生する代わりに、ブラウザはロケーションバーをもとの <abbr>URL</abbr> (<code><a href=http://diveintohtml5.info/examples/history/fer.html>http://diveintohtml5.info/examples/history/fer.html</a></code>) に書き換え、そして <code>popstate</code> イベントを発生させる。
 <li>自前の <code>popstate</code> ハンドラが <code>swapPhoto()</code> を再度呼び出す。引数には、ロケーションバーではすでに書き変わっている、もとのページの <abbr>URL</abbr> が与えられる。
-<li><code>swapPhoto()</code> 関数は <code>XMLHttpRequest</code> を使用し <code><a href=http://diveintohtml5.org/examples/history/gallery/fer.html>http://diveintohtml5.org/examples/history/<strong>gallery</strong>/fer.html</a></code> にある <abbr>HTML</abbr> の一部をダウンロードし、その内容を <code>&lt;aside></code> 要素の <code>innerHTML</code> プロパティにセットする。Casey の写真とキャプションが、Fer の写真とキャプションに変更される。
+<li><code>swapPhoto()</code> 関数は <code>XMLHttpRequest</code> を使用し <code><a href=http://diveintohtml5.info/examples/history/gallery/fer.html>http://diveintohtml5.info/examples/history/<strong>gallery</strong>/fer.html</a></code> にある <abbr>HTML</abbr> の一部をダウンロードし、その内容を <code>&lt;aside></code> 要素の <code>innerHTML</code> プロパティにセットする。Casey の写真とキャプションが、Fer の写真とキャプションに変更される。
 </ul>
 
 <p>イリュージョンは成功だ。ページ内容とロケーションバーの <abbr>URL</abbr> を見ると、まるでユーザーはあるページから別のページを行き来しているようだ。しかし、ページ全体が更新されているわけではない。これは細かいトリックを組み合わせたイリュージョンなのだ。
@@ -230,12 +227,12 @@ body {
 </div>
 </div>-->
 
-<p>訳註：このページは <a href=http://diveintohtml5.org/>Dive Into HTML5</a> の <a href=http://diveintohtml5.org/history.html>&#8220;Manipulating History for Fun <i>&amp;</i> Profit&#8221;</a> の日本語訳です。
+<p>訳註：このページは <a href=http://diveintohtml5.info/>Dive Into HTML5</a> の <a href=http://diveintohtml5.info/history.html>&#8220;Manipulating History for Fun <i>&amp;</i> Profit&#8221;</a> の日本語訳です。
 
 <div class=pf>
 <h4>Did You Know?</h4>
 <div class=moneybags>
-<blockquote><p>原文が公開されている <a href=http://diveintohtml5.org/>Dive Into HTML5</a> というサイトは &#8220;HTML5: Up &amp; Running&#8221; という名前で Google Press より出版、O&#8217;Reilly Media より発売されています。(ePub, Mobi, <abbr>DRM</abbr>-free <abbr>PDF</abbr> など紙以外の媒体でも販売されています。)
+<blockquote><p>原文が公開されている <a href=http://diveintohtml5.info/>Dive Into HTML5</a> というサイトは &#8220;HTML5: Up &amp; Running&#8221; という名前で Google Press より出版、O&#8217;Reilly Media より発売されています。(ePub, Mobi, <abbr>DRM</abbr>-free <abbr>PDF</abbr> など紙以外の媒体でも販売されています。)
 <p>原著を購入したい方はぜひ <a href="http://www.amazon.com/HTML5-Up-Running-Mark-Pilgrim/dp/0596806027?ie=UTF8&amp;tag=diveintomark-20&amp;creativeASIN=0596806027">著者のアフィリエイトリンク</a> から、もしくは <a href=http://oreilly.com/catalog/9780596806033>O&#8217;Reilly より電子版を購入</a> してください。
 <p>訳註：&#8220;HTML5: Up &amp; Running&#8221; の日本語訳はオライリー・ジャパンより<a href=http://www.oreilly.co.jp/books/9784873114828/>「入門 HTML5」</a>として発売されています。(注：本ページの訳者が監訳として関わっていますが、この翻訳文書は書籍と無関係です。また、この元ページは &#8220;HTML5: Up &amp; Running&#8221; には含まれていません。)
 </blockquote>

@@ -2,8 +2,7 @@
 <meta charset=utf-8>
 <title>How Did We Get Here? - Dive Into HTML5 (日本語訳)</title>
 <!--[if lt IE 9]><script src=j/html5.js></script><![endif]-->
-<link rel="shortcut icon" href=favicon.ico>
-<!--link rel=alternate type=application/atom+xml href=http://hg.diveintohtml5.org/hgweb.cgi/atom-log-->
+<!--link rel=alternate type=application/atom+xml href=https://github.com/diveintomark/diveintohtml5/commits/master.atom-->
 <link rel=stylesheet href=screen.css>
 <style>
 body{counter-reset:h1 1}
@@ -135,7 +134,7 @@ PRESENT	 もとの文書が表示された時に表示する</pre>
 <p>この仕組みをアイコンを選択する方法として利用すると、アンカーが入れ子になるのは分かっている。うーむ。ただ、特別なタグは欲しくはなかったんだ。
 </blockquote>
 
-<p>この提案も実装されることはなかったが、<code>rel</code> 属性は <a href="http://diveintohtml5.org/semantics.html#link">今も存在している</a>。
+<p>この提案も実装されることはなかったが、<code>rel</code> 属性は <a href="http://diveintohtml5.info/semantics.html#link">今も存在している</a>。
 
 <p>この提案に <a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0188.html"><cite>Jim Davis</cite> が次のように付け加えている</a>。
 
@@ -249,7 +248,7 @@ PRESENT	 もとの文書が表示された時に表示する</pre>
 
 <p>しかしこれらの事実は、「どうして <code>&lt;img></code> 要素が存在するのか」という疑問の答えにはなっていない。なぜ <code>&lt;icon></code> 要素ではなかったのか、<code>&lt;include></code> 要素ではなかったのか。もしくはハイパーリンクに <code>include</code> 属性をつける、あるいは <code>rel</code> 属性の値の組み合わせで表現する方法はどうして実現されなかったのか。いったい、なぜ <code>&lt;img></code> 要素なのだろうか。答えはとても簡単だ。Marc Andreessen が <code>&lt;img></code> 要素を実装して、それをリリースしたからだ。
 
-<p>しかし、<em>すべての</em>実装が勝つというわけではない。Andrew や Intermedia, HyTime にも実装があった。実装は必要だが、それだけでは成功しない。また、私は標準に先行した実装が最良の方法だと言いたいわけでは<em>ない</em>。Marc の <code>&lt;img></code> 要素は画像フォーマットを指定しなかった。テキストがどう回り込むかも定義しなかった。代替テキストや古いブラウザのフォールバックもサポートしていなかった。17 年たった今でも、<a href="http://tools.ietf.org/html/draft-abarth-mime-sniff">私たちは content sniffing に苦慮している</a>。それは <a href="http://code.google.com/p/doctype/wiki/ArticleContentSniffing">厄介なセキュリティ脆弱性の温床になってもいる</a>。そしてそれは、<a http="http://ja.wikipedia.org/wiki/ブラウザ戦争" data-orig-href="http://en.wikipedia.org/wiki/Browser_wars">ブラウザ戦争</a> よりも前、17 年前の 1993 年 2 月 25 日に Marc Andreessen が言った「MIME? そうかもね」という言葉と、それを反映した実装がリリースしたときまで遡るのだ。
+<p>しかし、<em>すべての</em>実装が勝つというわけではない。Andrew や Intermedia, HyTime にも実装があった。実装は必要だが、それだけでは成功しない。また、私は標準に先行した実装が最良の方法だと言いたいわけでは<em>ない</em>。Marc の <code>&lt;img></code> 要素は画像フォーマットを指定しなかった。テキストがどう回り込むかも定義しなかった。代替テキストや古いブラウザのフォールバックもサポートしていなかった。17 年たった今でも、<a href="http://tools.ietf.org/html/draft-abarth-mime-sniff">私たちは content sniffing に苦慮している</a>。それは <a href="http://www.securityfocus.com/archive/1/503867">厄介なセキュリティ脆弱性の温床になってもいる</a>。そしてそれは、<a http="http://ja.wikipedia.org/wiki/ブラウザ戦争" data-orig-href="http://en.wikipedia.org/wiki/Browser_wars">ブラウザ戦争</a> よりも前、17 年前の 1993 年 2 月 25 日に Marc Andreessen が言った「MIME? そうかもね」という言葉と、それを反映した実装がリリースしたときまで遡るのだ。
 
 <p>実装されたものが勝つのだ。 
 
@@ -346,7 +345,7 @@ PRESENT	 もとの文書が表示された時に表示する</pre>
 
 <p>なんてばかげた仕事だと聞こえるかもしれない。実際、その通りだ。いや、その通りだった。5 年かかったが <abbr>WHAT</abbr> Working Group はついに既存の Web サイトと互換性のあるかたちで (すこしのエッジケースはあれど) <a href=http://www.whatwg.org/specs/web-apps/current-work/multipage/parsing.html><abbr>HTML</abbr> をパースするアルゴリズム</a> を定義したのだ。もちろん、そのアルゴリズムにはどこにも、<abbr>HTML</abbr> の処理器が処理を止め、エラーメッセージをユーザーに見せるような処理は定義されていない。
 
-<p>このリバースエンジニアリング作業のかたわら、<abbr>WHAT</abbr> Working Group は他の作業も進めていた。ひとつは <abbr>HTML</abbr> フォームに新しいコントロールを追加する、もともと <a href=http://www.whatwg.org/specs/web-forms/current-work/>Web Forms 2.0</a> と呼ばれていた仕様だった。(フォームについては <a href=http://diveintohtml5.org/forms.html>A Form of Madness</a> でとりあげている。) もうひとつは <a href=http://diveintohtml5.org/canvas.html>ダイレクトモードの描画 API である Canvas</a> や <a href=http://diveintohtml5.org/video.html>プラグインなしで音声や動画を再生する要素</a> を定義した &#8220;Web Applications 1.0&#8221; と呼ばれる仕様だった。
+<p>このリバースエンジニアリング作業のかたわら、<abbr>WHAT</abbr> Working Group は他の作業も進めていた。ひとつは <abbr>HTML</abbr> フォームに新しいコントロールを追加する、もともと <a href=http://www.whatwg.org/specs/web-forms/current-work/>Web Forms 2.0</a> と呼ばれていた仕様だった。(フォームについては <a href=http://diveintohtml5.info/forms.html>A Form of Madness</a> でとりあげている。) もうひとつは <a href=http://diveintohtml5.info/canvas.html>ダイレクトモードの描画 API である Canvas</a> や <a href=http://diveintohtml5.info/video.html>プラグインなしで音声や動画を再生する要素</a> を定義した &#8220;Web Applications 1.0&#8221; と呼ばれる仕様だった。
 
 <p class=a>&#x2767;
 
@@ -400,14 +399,14 @@ PRESENT	 もとの文書が表示された時に表示する</pre>
 </div>
 </div>-->
 
-<p>訳註：このページは <a href=http://diveintohtml5.org/>Dive Into HTML5</a> の <a href=http://diveintohtml5.org/past.html>&#8220;How Did We Get Here?&#8221;</a> の日本語訳です。
+<p>訳註：このページは <a href=http://diveintohtml5.info/>Dive Into HTML5</a> の <a href=http://diveintohtml5.info/past.html>&#8220;How Did We Get Here?&#8221;</a> の日本語訳です。
 
 <div class=pf>
 <h4>Did You Know?</h4>
 <div class=moneybags>
-<blockquote><p>原文が公開されている <a href=http://diveintohtml5.org/>Dive Into HTML5</a> というサイトは &#8220;HTML5: Up &amp; Running&#8221; という名前で Google Press より出版、O&#8217;Reilly Media より発売されています。(ePub, Mobi, <abbr>DRM</abbr>-free <abbr>PDF</abbr> など紙以外の媒体でも販売されています。)
+<blockquote><p>原文が公開されている <a href=http://diveintohtml5.info/>Dive Into HTML5</a> というサイトは &#8220;HTML5: Up &amp; Running&#8221; という名前で Google Press より出版、O&#8217;Reilly Media より発売されています。(ePub, Mobi, <abbr>DRM</abbr>-free <abbr>PDF</abbr> など紙以外の媒体でも販売されています。)
 <p>原著を購入したい方はぜひ <a href="http://www.amazon.com/HTML5-Up-Running-Mark-Pilgrim/dp/0596806027?ie=UTF8&amp;tag=diveintomark-20&amp;creativeASIN=0596806027">著者のアフィリエイトリンク</a> から、もしくは <a href=http://oreilly.com/catalog/9780596806033>O&#8217;Reilly より電子版を購入</a> してください。
-<p>訳註：&#8220;HTML5: Up &amp; Running&#8221; の日本語訳はオライリー・ジャパンより<a href=http://www.oreilly.co.jp/books/9784873114828/>「入門 HTML5」</a>として発売されています。(注：本ページの訳者が監訳として関わっていますが、この翻訳文書は書籍と無関係です。)
+<p>訳註：&#8220;HTML5: Up &amp; Running&#8221; の日本語訳はオライリー・ジャパンより<a href=http://www.oreilly.co.jp/books/9784873114828/>「入門 HTML5」</a>として発売されています。(本ページの訳者が監訳として関わっていますが、この翻訳文書は書籍と無関係です。)
 </blockquote>
 </div>
 </div>

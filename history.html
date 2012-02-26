@@ -71,7 +71,9 @@ body {
 <thead>
 <tr><th title="Internet Explorer">IE<th title="Mozilla Firefox">Firefox<th title="Apple Safari">Safari<th title="Google Chrome">Chrome<th>Opera<th>iPhone<th>Android
 <tbody>
-<tr><td>&middot;<td>4.0+<td>5.0+<td>8.0+<td>11.50+<td>4.2.1+<td>&middot;
+<tr><td>10+<td>4.0+<td>5.0+<td>8.0+<td>11.50+<td>4.2.1+<td>2.2+*
+<tfoot>
+<tr><td colspan="7" style="text-align:left">* Android ブラウザは Android 2.2 で History API をサポートしたが、Android 3.x, Android 4.0 ではサポートが無効にされている。
 </table>
 
 <p><a href=http://diveintohtml5.info/examples/history/fer.html>dive into dogs</a> は何の変哲もないが、作るのはそこまで簡単でない、<abbr>HTML5</abbr> の History <abbr>API</abbr> を利用したサンプルだ。長めの記事と、インラインのフォトギャラリーというよくあるパターンで構成されている。サポートされたブラウザでは、フォトギャラリー中の Next と Previous というリンクをクリックすると、写真が置き換えられ、<em>さらにブラウザのロケーションバーにある <abbr>URL</abbr> も更新される</em>。しかし、ページ全体が更新されるわけではない。サポートされていないブラウザや、スクリプトを無効にしたブラウザにおいて、これらのリンクは通常のリンクとして扱われるため、新しいページに移動することになる。もちろん、新しいページなので、全体が更新される。

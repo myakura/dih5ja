@@ -25,7 +25,7 @@ body {
   })();
 </script>
 <!--link rel=prefetch href=index.html-->
-<!--p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#history>Dive Into <abbr>HTML5</abbr></a> <span class=u>&#8227;</span>-->
+<!--p>You are here: <a href=index.html>Home</a> <span class=u>&#8227;</span> <a href=table-of-contents.html#past>Dive Into <abbr>HTML5</abbr></a> <span class=u>&#8227;</span>-->
 <h1><br>How Did We Get Here?</h1>
 <p id=toc>&nbsp;
 <p class=a>&#x2767;
@@ -34,7 +34,6 @@ body {
 <p class=f style=clear:both>私は最近、ある Mozilla の開発者が <a href=http://lists.w3.org/Archives/Public/public-html/2010Jan/0107.html>標準の策定における葛藤</a> についてこう述べているのを目にした。
 
 <blockquote data-orig-cite=http://lists.w3.org/Archives/Public/public-html/2010Jan/0107.html>
-
 <p>実装と仕様は、繊細なステップを踏みながら踊り続けないといけないんだ。仕様が安定する前に実装が始まって欲しくないというあなたの気持ちは分かる。そんな未完成の実装に人々が依存しはじめて、それがあとあと仕様そのものにも影響することを怖れているのだろう。でも、仕様が実装や制作者が試す前に固まってしまうのも考え物だろう。それは、仕様にはフィードバックが必要だからだ。両者の間には常に葛藤があって、僕らはその間でなんとかやっていくしかないんだ。
 </blockquote>
 
@@ -166,7 +165,7 @@ PRESENT	 もとの文書が表示された時に表示する</pre>
 <p>何かの一般化に、大きなコストをかけるべきではないよ。
 </blockquote>
 
-<p>今となって思えば、この Jay の懸念は鋭かった。翌週ということにはならなかったが、HTML5 ではついに <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/video.html#video"><code>&lt;video></code></a> と <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/video.html#audio"><code>&lt;audio></code></a> が追加される。
+<p>今となって思えば、この Jay の懸念は鋭かった。翌週ということにはならなかったが、HTML5 ではついに <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-video-element.html#video"><code>&lt;video></code></a> と <a href="http://www.whatwg.org/specs/web-apps/current-work/multipage/the-video-element.html#audio"><code>&lt;audio></code></a> が追加される。
 
 <p>さて、Jay の最初のメッセージに返答するかたちで <a href="http://1997.webhistory.org/www.lists/www-talk.1993q1/0204.html"><cite>Dave Raggett</cite> が次のメッセージを寄せている</a>。
 
@@ -248,7 +247,7 @@ PRESENT	 もとの文書が表示された時に表示する</pre>
 
 <p>しかしこれらの事実は、「どうして <code>&lt;img></code> 要素が存在するのか」という疑問の答えにはなっていない。なぜ <code>&lt;icon></code> 要素ではなかったのか、<code>&lt;include></code> 要素ではなかったのか。もしくはハイパーリンクに <code>include</code> 属性をつける、あるいは <code>rel</code> 属性の値の組み合わせで表現する方法はどうして実現されなかったのか。いったい、なぜ <code>&lt;img></code> 要素なのだろうか。答えはとても簡単だ。Marc Andreessen が <code>&lt;img></code> 要素を実装して、それをリリースしたからだ。
 
-<p>しかし、<em>すべての</em>実装が勝つというわけではない。Andrew や Intermedia, HyTime にも実装があった。実装は必要だが、それだけでは成功しない。また、私は標準に先行した実装が最良の方法だと言いたいわけでは<em>ない</em>。Marc の <code>&lt;img></code> 要素は画像フォーマットを指定しなかった。テキストがどう回り込むかも定義しなかった。代替テキストや古いブラウザのフォールバックもサポートしていなかった。17 年たった今でも、<a href="http://tools.ietf.org/html/draft-abarth-mime-sniff">私たちは content sniffing に苦慮している</a>。それは <a href="http://www.securityfocus.com/archive/1/503867">厄介なセキュリティ脆弱性の温床になってもいる</a>。そしてそれは、<a href="http://ja.wikipedia.org/wiki/ブラウザ戦争" data-orig-href="http://en.wikipedia.org/wiki/Browser_wars">ブラウザ戦争</a> よりも前、17 年前の 1993 年 2 月 25 日に Marc Andreessen が言った「MIME? そうかもね」という言葉と、それを反映した実装がリリースしたときまで遡るのだ。
+<p>しかし、<em>すべての</em>実装が勝つというわけではない。Andrew や Intermedia, HyTime にも実装があった。実装は必要だが、それだけでは成功しない。また、私は標準に先行した実装が最良の方法だと言いたいわけでは<em>ない</em>。Marc の <code>&lt;img></code> 要素は画像フォーマットを指定しなかった。テキストがどう回り込むかも定義しなかった。代替テキストや古いブラウザのフォールバックもサポートしていなかった。17 年たった今でも、<a href="http://mimesniff.spec.whatwg.org/">私たちは content sniffing に苦慮している</a>。それは <a href="http://www.securityfocus.com/archive/1/503867">厄介なセキュリティ脆弱性の温床になってもいる</a>。そしてそれは、<a href="http://ja.wikipedia.org/wiki/ブラウザ戦争" data-orig-href="http://en.wikipedia.org/wiki/Browser_wars">ブラウザ戦争</a> よりも前、17 年前の 1993 年 2 月 25 日に Marc Andreessen が言った「MIME? そうかもね」という言葉と、それを反映した実装がリリースしたときまで遡るのだ。
 
 <p>実装されたものが勝つのだ。 
 
@@ -258,7 +257,7 @@ PRESENT	 もとの文書が表示された時に表示する</pre>
 
 <p>1997 年 12 月、World Wide Web Consortium (W3C) は <a href=http://www.w3.org/TR/REC-html40-971218/><abbr>HTML</abbr> 4.0</a> を公開し、<abbr>HTML</abbr> Working Group をクローズした。それから2ヶ月も経たないうちに、別の <abbr>W3C</abbr> Working Group が <a href=http://www.w3.org/TR/1998/REC-xml-19980210><abbr>XML</abbr> 1.0</a> を公開した。さらにそれから3ヶ月ほど経過したとき、W3C の運営者は &#8220;<a href=http://www.w3.org/MarkUp/future/>Shaping the Future of <abbr>HTML</abbr></a>&#8221; HTML の将来について考えるというワークショップを開催した。ここで、W3C は HTML を諦めたのかという疑問が出てくるだろう。彼らの答えはこうだ。
 
-<blockquote data-orig-cite=http://esw.w3.org/topic/HTML/history>
+<blockquote data-orig-cite=http://www.w3.org/html/wg/wiki/history>
 <p>議論のなかで、<abbr>HTML</abbr> 4.0 をさらに拡張するのは難しいという見解が一致した。4.0 を <abbr>XML</abbr> アプリケーションに変換する必要があるからだ。このような制約を振り払う方法は、次世代の HTML を <abbr>XML</abbr> タグセットのもと新しく始めることにある。
 </blockquote>
 
@@ -278,7 +277,7 @@ PRESENT	 もとの文書が表示された時に表示する</pre>
 
 <h2 id=xhtml>Everything you know about XHTML is wrong</h2>
 
-<p>さて、<abbr>MIME</abbr> 型はなぜ重要なのだろうか。先程からしつこくこれに触れている理由は、<a href=http://esw.w3.org/topic/HTML/DraconianErrorHandling>draconian error handling</a> にある。ブラウザは <abbr>HTML</abbr> にいつも寛容だ。たとえ <code>&lt;/head></code> タグのない <abbr>HTML</abbr> ページを作ったとしても、ふつうに表示してくれる。(いくつかのタグは <code>&lt;head></code> の終了と <code>&lt;body></code> の開始を示唆するのだ。) タグは段階をふまえネストする、つまり互い違いに閉じてはならないのだが、たとえば <code>&lt;b>&lt;i>&lt;/b>&lt;/i></code> と書いてしまったとしても、ブラウザはただ (どうやってか) 対処してしまうのだ。エラーメッセージが出ることもない。
+<p>さて、<abbr>MIME</abbr> 型はなぜ重要なのだろうか。先程からしつこくこれに触れている理由は、<a href=http://www.w3.org/html/wg/wiki/DraconianErrorHandling>draconian error handling</a> にある。ブラウザは <abbr>HTML</abbr> にいつも寛容だ。たとえ <code>&lt;/head></code> タグのない <abbr>HTML</abbr> ページを作ったとしても、ふつうに表示してくれる。(いくつかのタグは <code>&lt;head></code> の終了と <code>&lt;body></code> の開始を示唆するのだ。) タグは段階をふまえネストする、つまり互い違いに閉じてはならないのだが、たとえば <code>&lt;b>&lt;i>&lt;/b>&lt;/i></code> と書いてしまったとしても、ブラウザはただ (どうやってか) 対処してしまうのだ。エラーメッセージが出ることもない。
 
 <p style="float:left;margin-right:1.75em"><img src=i/openclipart.org_johnny_automatic_3_birds.png width=187 height=362 alt="三羽の笑う鳥">
 
@@ -382,7 +381,7 @@ PRESENT	 もとの文書が表示された時に表示する</pre>
 
 <ul>
 <li><a href=http://hixie.ch/commentary/web/history>The History of the Web</a> ― Ian Hickson による古いメモ
-<li><a href=http://esw.w3.org/topic/HTML/history>HTML/History</a>, by Michael Smith, Henri Sivonen, and others
+<li><a href=http://www.w3.org/html/wg/wiki/History>History - HTML WG Wiki</a>, by Michael Smith, Henri Sivonen, and others
 <li><a href=http://www.atendesigngroup.com/blog/brief-history-of-html>A Brief History of HTML</a>, by Scott Reynen
 </ul>
 
